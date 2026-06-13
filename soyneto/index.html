@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>soyneto.ar — Tu negocio, en claro.</title>
+  <meta name="description" content="soyneto.ar — contabilidad online para emprendedores argentinos. Te ayudamos a ordenarte con ARCA, armar tu empresa y facturar sin miedo. Sin oficina, sin papeles, sin vueltas." />
+
+  <!-- Marca JS activo: evita que .reveal oculte contenido si el JS no carga -->
+  <script>document.documentElement.classList.add('js');</script>
+
+  <link rel="icon" type="image/png" href="assets/img/favicon.png" />
+
+  <!-- Iconos (placeholders coherentes hasta tener la iconografía final) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.31.0/dist/tabler-icons.min.css" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'verde-neto':   '#1D9E75',
+            'verde-oscuro': '#0F6E56',
+            'negro-suave':  '#1D1D1B',
+            'fondo':        '#F4F7F5',
+            'plan-violeta': '#534AB7',
+            'plan-azul':    '#0C447C',
+          },
+          fontFamily: {
+            sans: ['"Helvetica Neue"', 'Arial', 'sans-serif'],
+          },
+        },
+      },
+    };
+  </script>
+
+  <style>
+    html { scroll-behavior: smooth; }
+    body { font-family: "Helvetica Neue", Arial, sans-serif; font-weight: 300; }
+    h1, h2, h3, .font-bold, strong { font-weight: 700; }
+
+    /* Offset para anclas bajo la navbar fija */
+    section[id] { scroll-margin-top: 88px; }
+
+    /* Menú mobile — slide */
+    #menu-mobile {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height .35s ease;
+    }
+    #menu-mobile.is-open { max-height: 28rem; }
+
+    /* Sombra suave (verde oscuro) para legibilidad del texto del hero sobre el banner */
+    .hero-text-shadow { text-shadow: 0 2px 12px rgba(15,110,86,.65), 0 1px 3px rgba(15,110,86,.55); }
+
+    /* Patrón sutil de nodos para el hero (placeholder del banner) */
+    .hero-pattern {
+      background-image:
+        radial-gradient(rgba(255,255,255,.12) 1.5px, transparent 1.5px);
+      background-size: 38px 38px;
+    }
+
+    /* Degradé verde animado (sección Servicios Puntuales) */
+    .animated-gradient {
+      background: linear-gradient(120deg, #3B8F74, #0F6E56, #1D9E75, #0F6E56);
+      background-size: 300% 300%;
+      animation: gradientShift 14s ease infinite;
+    }
+    @keyframes gradientShift {
+      0%   { background-position: 0% 50%; }
+      50%  { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Animación de aparición al hacer scroll / al cargar */
+    .js .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity .6s ease, transform .6s ease;
+    }
+    .js .reveal.is-visible {
+      opacity: 1;
+      transform: none;
+    }
+
+    /* Tarjetas de Condiciones — hover manual + auto-hover secuencial */
+    .cond-card {
+      transition: transform .4s ease, box-shadow .4s ease, background-color .4s ease;
+      will-change: transform;
+    }
+    .cond-card:hover,
+    .cond-card.is-active {
+      transform: translateY(-6px) scale(1.03);
+      background-color: #0F6E56; /* verde-oscuro */
+      box-shadow: 0 14px 32px rgba(15,110,86,.35);
+    }
+
+    /* Pop-up de bienvenida (fade + zoom) */
+    #popup { opacity: 0; transition: opacity .3s ease; }
+    #popup.is-open { opacity: 1; }
+    #popup .popup-panel { transform: scale(.94); transition: transform .3s ease; }
+    #popup.is-open .popup-panel { transform: scale(1); }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      #menu-mobile { transition: none; }
+      .animated-gradient { animation: none; }
+      .cond-card { transition: none; }
+      .js .reveal { opacity: 1; transform: none; transition: none; }
+      #popup, #popup .popup-panel { transition: none; }
+    }
+  </style>
+</head>
+
+<body class="bg-fondo text-negro-suave antialiased">
+
+  <!--
+    ===========================================================================
+    TODO (assets pendientes):
+      · WhatsApp: 541124738056 (ya cargado en todos los wa.me)
+      · Banner / ilustración del hero (#inicio)
+      · Logo Neto definitivo (hoy recreado en HTML/CSS) + favicon
+    ===========================================================================
+  -->
+
+  <!-- ====================== NAVBAR ====================== -->
+  <header id="navbar" class="fixed top-0 inset-x-0 z-50 bg-negro-suave/95 backdrop-blur border-b border-white/10">
+    <nav class="max-w-screen-xl mx-auto px-6 h-[72px] flex items-center justify-between gap-4">
+
+      <!-- Logo Neto (variante fondo oscuro) -->
+      <a href="#inicio" class="flex items-center gap-2.5 shrink-0" aria-label="soyneto.ar — inicio">
+        <span class="inline-flex items-center justify-center w-9 h-9 rounded-lg bg-verde-neto text-white font-bold text-xl leading-none">N</span>
+        <span class="flex flex-col leading-none">
+          <span class="text-2xl font-normal lowercase tracking-tight text-white">soyneto.ar</span>
+          <span class="mt-0.5 h-[2px] w-[90%] bg-verde-neto rounded-full"></span>
+        </span>
+      </a>
+
+      <!-- Enlaces desktop -->
+      <ul class="hidden lg:flex items-center gap-7 text-[17.6px] font-bold text-white/80">
+        <li><a href="#inicio" class="hover:text-verde-neto transition-colors">Inicio</a></li>
+        <li><a href="#planes" class="hover:text-verde-neto transition-colors">Planes</a></li>
+
+        <!-- Servicios con submenú desplegable -->
+        <li class="relative group">
+          <a href="#servicios" class="inline-flex items-center gap-1 hover:text-verde-neto transition-colors">
+            Servicios
+            <i class="ti ti-chevron-down text-base transition-transform duration-200 group-hover:rotate-180"></i>
+          </a>
+          <div class="invisible opacity-0 translate-y-1 group-hover:visible group-hover:opacity-100 group-hover:translate-y-0 group-focus-within:visible group-focus-within:opacity-100 group-focus-within:translate-y-0 transition-all duration-200 absolute left-0 top-full pt-3 z-50">
+            <ul class="w-max min-w-[16rem] bg-negro-suave border border-white/10 rounded-xl shadow-xl py-2 text-[15px]">
+              <li><a href="#servicios" class="block px-4 py-2 text-white/80 hover:text-verde-neto hover:bg-white/5 whitespace-nowrap transition-colors">Constitución de SAS</a></li>
+              <li><a href="#servicios" class="block px-4 py-2 text-white/80 hover:text-verde-neto hover:bg-white/5 whitespace-nowrap transition-colors">Constitución de SRL</a></li>
+              <li><a href="#servicios" class="block px-4 py-2 text-white/80 hover:text-verde-neto hover:bg-white/5 whitespace-nowrap transition-colors">Alta monotributista</a></li>
+              <li><a href="#servicios" class="block px-4 py-2 text-white/80 hover:text-verde-neto hover:bg-white/5 whitespace-nowrap transition-colors">Asesoría impositiva puntual</a></li>
+              <li><a href="#servicios" class="block px-4 py-2 text-white/80 hover:text-verde-neto hover:bg-white/5 whitespace-nowrap transition-colors">Regularización ARCA/AGIP/ARBA</a></li>
+              <li><a href="#servicios" class="block px-4 py-2 text-white/80 hover:text-verde-neto hover:bg-white/5 whitespace-nowrap transition-colors">Pack lanzamiento</a></li>
+              <li><a href="#servicios" class="block px-4 py-2 text-white/80 hover:text-verde-neto hover:bg-white/5 whitespace-nowrap transition-colors">Balance anual (SRL/SA/SAS)</a></li>
+              <li><a href="#servicios" class="block px-4 py-2 text-white/80 hover:text-verde-neto hover:bg-white/5 whitespace-nowrap transition-colors">Ganancias / Bienes Personales</a></li>
+            </ul>
+          </div>
+        </li>
+
+        <li><a href="#sociedades" class="hover:text-verde-neto transition-colors">Sociedades</a></li>
+        <li><a href="#condiciones" class="hover:text-verde-neto transition-colors">Condiciones</a></li>
+        <li class="ml-3 pl-3 border-l border-white/15">
+          <a href="../" class="inline-flex items-center gap-1 bg-white/75 text-negro-suave hover:bg-white px-4 py-1.5 rounded-md transition-colors"><i class="ti ti-arrow-left text-base" aria-hidden="true"></i> JLC</a>
+        </li>
+      </ul>
+
+      <!-- CTA WhatsApp desktop -->
+      <a href="https://wa.me/541124738056?text=Hola%2C%20quiero%20una%20consulta%20gratis."
+         target="_blank" rel="noopener"
+         class="hidden lg:inline-flex items-center gap-2 bg-verde-neto hover:bg-verde-oscuro text-white text-[19px] font-medium px-5 py-2.5 rounded-lg transition-colors">
+        <i class="ti ti-brand-whatsapp text-lg"></i> Consultanos
+      </a>
+
+      <!-- Hamburguesa mobile -->
+      <button id="btn-menu" type="button"
+              class="lg:hidden inline-flex items-center justify-center w-10 h-10 -mr-2 text-white"
+              aria-label="Abrir menú" aria-expanded="false" aria-controls="menu-mobile">
+        <i class="ti ti-menu-2 text-[26px]"></i>
+      </button>
+    </nav>
+
+    <!-- Menú mobile -->
+    <div id="menu-mobile" class="lg:hidden border-t border-white/10 bg-negro-suave text-white">
+      <ul class="max-w-screen-xl mx-auto px-6 py-4 flex flex-col gap-1 text-[16px]">
+        <li><a href="#inicio" class="block py-2.5 hover:text-verde-neto">Inicio</a></li>
+        <li><a href="#planes" class="block py-2.5 hover:text-verde-neto">Planes</a></li>
+        <li><a href="#servicios" class="block py-2.5 hover:text-verde-neto">Servicios</a></li>
+        <li><a href="#sociedades" class="block py-2.5 hover:text-verde-neto">Sociedades</a></li>
+        <li><a href="#condiciones" class="block py-2.5 hover:text-verde-neto">Condiciones</a></li>
+        <li class="pt-2"><a href="../" class="inline-flex items-center gap-1 bg-white/75 text-negro-suave font-bold hover:bg-white px-4 py-1.5 rounded-md transition-colors"><i class="ti ti-arrow-left text-base" aria-hidden="true"></i> JLC</a></li>
+        <li class="pt-3">
+          <a href="https://wa.me/541124738056?text=Hola%2C%20quiero%20una%20consulta%20gratis."
+             target="_blank" rel="noopener"
+             class="inline-flex items-center gap-2 bg-verde-neto hover:bg-verde-oscuro text-white font-medium px-5 py-3 rounded-lg transition-colors">
+            <i class="ti ti-brand-whatsapp text-lg"></i> Consulta gratis
+          </a>
+        </li>
+      </ul>
+    </div>
+  </header>
+
+  <!-- ====================== HERO / FRASE DE MARCA ====================== -->
+  <section id="inicio" class="relative isolate overflow-hidden bg-verde-oscuro text-white pt-[72px] min-h-[30rem] md:min-h-[36rem] xl:min-h-0">
+    <!-- Banner: en mobile, tablet y laptop cubre todo el hero (object-cover, anclado a la derecha
+         para que se vea la persona); en xl vuelve al flujo a proporción natural definiendo la altura. -->
+    <img src="assets/img/banner.png" alt=""
+         class="pointer-events-none select-none block absolute inset-0 z-0 h-full w-full object-cover object-[90%] md:object-right xl:static xl:h-auto xl:w-full"
+         aria-hidden="true" />
+    <!-- Tinte verde sobre el banner en mobile para legibilidad del texto -->
+    <div class="absolute inset-0 z-0 md:hidden bg-verde-oscuro/45" aria-hidden="true"></div>
+
+    <!-- Texto: en flujo (mobile) / superpuesto y centrado (md+) -->
+    <div class="relative md:absolute md:inset-x-0 md:bottom-0 md:top-[72px] z-10 flex items-center">
+      <div class="w-full max-w-screen-xl mx-auto px-6 py-16 md:py-0">
+      <div class="max-w-3xl">
+        <h1 class="reveal hero-text-shadow font-bold text-3xl sm:text-4xl lg:text-4xl xl:text-5xl leading-[1.15]">
+          En Argentina emprender ya es difícil.<br class="hidden sm:block" />
+          Ocuparte de ARCA no debería serlo.
+          <span class="text-white/90">"soyneto.ar" existe para eso.</span>
+        </h1>
+
+        <p class="reveal hero-text-shadow mt-8 max-w-2xl text-[17.6px] sm:text-[19.8px] font-bold text-white/85 leading-relaxed">
+          Contabilidad online para emprendedores argentinos. Te ayudamos a
+          ordenarte con ARCA, armar tu empresa y facturar sin miedo. Sin oficina, sin papeles, sin vueltas.
+        </p>
+      </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================== MISIÓN Y VISIÓN ====================== -->
+  <section id="nosotros" class="py-20 lg:py-24">
+    <div class="max-w-screen-xl mx-auto px-6">
+      <div class="inline-block mb-10 reveal">
+        <h2 class="text-3xl sm:text-3xl font-bold">Misión y Visión</h2>
+        <div class="h-[3px] w-full bg-verde-neto rounded-full mt-3"></div>
+      </div>
+
+      <div class="grid gap-6">
+        <div class="bg-white border border-black/5 rounded-2xl p-8 lg:p-10 shadow-sm transition-all duration-200 hover:-translate-y-1.5 hover:shadow-xl hover:border-verde-neto/40 reveal">
+          <div class="flex items-center gap-3.5 mb-5">
+            <span class="inline-flex items-center justify-center w-12 h-12 rounded-lg bg-verde-neto/10 text-verde-neto">
+              <i class="ti ti-target-arrow text-2xl"></i>
+            </span>
+            <h3 class="text-[26.4px] font-bold">Misión</h3>
+          </div>
+          <p class="text-[22px] font-medium text-verde-oscuro leading-relaxed">
+            Ayudar a emprendedores y pequeños negocios argentinos a ordenarse fiscalmente,
+            sin vueltas y sin burocracia, para que puedan enfocarse en lo que realmente importa:
+            hacer crecer su negocio.
+          </p>
+          <p class="mt-5 text-[19.8px] text-negro-suave/75 leading-relaxed">
+            En Argentina, millones de freelancers y emprendedores evitan formalizarse porque el
+            sistema es complejo, los contadores son caros o inaccesibles, y nadie les habla en su
+            idioma. soyneto.ar existe para eliminar esa barrera.
+          </p>
+        </div>
+
+        <div class="bg-white border border-black/5 rounded-2xl p-8 lg:p-10 shadow-sm transition-all duration-200 hover:-translate-y-1.5 hover:shadow-xl hover:border-verde-neto/40 reveal">
+          <div class="flex items-center gap-3.5 mb-5">
+            <span class="inline-flex items-center justify-center w-12 h-12 rounded-lg bg-plan-violeta/10 text-plan-violeta">
+              <i class="ti ti-eye text-2xl"></i>
+            </span>
+            <h3 class="text-[26.4px] font-bold">Visión</h3>
+          </div>
+          <p class="text-[22px] font-medium text-plan-violeta leading-relaxed">
+            Ser el estudio contable digital de referencia para emprendedores argentinos, el lugar
+            al que van cuando arrancan, cuando crecen y cuando necesitan que alguien de confianza
+            los acompañe.
+          </p>
+          <p class="mt-5 text-[19.8px] text-negro-suave/75 leading-relaxed">
+            No queremos ser el más grande. Queremos ser el más confiable en nuestro segmento. Que
+            cuando alguien diga “quiero arrancar mi negocio en Argentina”, soyneto.ar sea el nombre que
+            aparezca primero.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================== PLANES Y PRECIOS ====================== -->
+  <section id="planes" class="bg-white py-20 lg:py-24 border-y border-black/5">
+    <div class="max-w-screen-xl mx-auto px-6">
+      <div class="inline-block mb-4 reveal">
+        <h2 class="text-3xl sm:text-3xl font-bold">Planes y Precios</h2>
+        <div class="h-[3px] w-full bg-verde-neto rounded-full mt-3"></div>
+      </div>
+      <p class="reveal text-lg text-negro-suave/60 font-light max-w-2xl mb-10">
+        Abonos mensuales en pesos. Elegí el plan según tu situación y escribinos por WhatsApp.
+      </p>
+
+      <!-- Monotributistas -->
+      <h3 class="text-[19.8px] font-bold mb-6">Monotributistas</h3>
+      <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+
+        <!-- Starter -->
+        <article class="flex flex-col rounded-2xl border border-black/5 bg-fondo/40 overflow-hidden shadow-sm transition-all duration-200 hover:-translate-y-1.5 hover:shadow-xl hover:border-verde-neto/40 reveal">
+          <div class="h-1.5" style="background:#1D9E75"></div>
+          <div class="flex flex-col flex-1 p-6">
+            <h4 class="font-bold text-[18.9px] text-center text-verde-neto">Starter</h4>
+            <p class="text-[14.7px] text-negro-suave/55 mb-4 text-center">Monotributista simple, sin empleados.</p>
+            <p class="mb-5 text-center"><span class="text-[31.5px] font-bold">$50.000</span><span class="text-[14.7px] text-negro-suave/55 font-light">/mes</span></p>
+            <ul class="space-y-2.5 text-[14.7px] text-negro-suave/75 mb-5">
+              <li class="flex gap-2"><i class="ti ti-check text-verde-neto shrink-0 mt-0.5"></i> Alta ARCA y alta de facturación</li>
+              <li class="flex gap-2"><i class="ti ti-check text-verde-neto shrink-0 mt-0.5"></i> Certificación PyME y categorización anual</li>
+              <li class="flex gap-2"><i class="ti ti-check text-verde-neto shrink-0 mt-0.5"></i> 3 consultas por WhatsApp (24h)</li>
+              <li class="flex gap-2"><i class="ti ti-check text-verde-neto shrink-0 mt-0.5"></i> 1 plan de facilidades/mes (ARCA/AGIP/ARBA)</li>
+            </ul>
+            <p class="text-[13.2px] font-bold text-negro-suave/75 mb-5">No incluye: Sueldos, planilla de rentabilidad.</p>
+            <div class="mt-auto">
+              <a href="https://wa.me/541124738056?text=Hola%2C%20me%20interesa%20el%20plan%20Starter."
+                 target="_blank" rel="noopener"
+                 class="inline-flex w-full items-center justify-center gap-2 bg-verde-neto hover:bg-verde-oscuro text-white text-sm font-medium px-4 py-2.5 rounded-lg transition-colors">
+                <i class="ti ti-brand-whatsapp text-base"></i> Lo quiero
+              </a>
+            </div>
+          </div>
+        </article>
+
+        <!-- Profesional -->
+        <article class="flex flex-col rounded-2xl border border-black/5 bg-fondo/40 overflow-hidden shadow-sm transition-all duration-200 hover:-translate-y-1.5 hover:shadow-xl hover:border-verde-neto/40 reveal">
+          <div class="h-1.5" style="background:#0F6E56"></div>
+          <div class="flex flex-col flex-1 p-6">
+            <h4 class="font-bold text-[18.9px] text-center text-verde-neto">Profesional</h4>
+            <p class="text-[14.7px] text-negro-suave/55 mb-4 text-center">Monotributista con 1 empleado.</p>
+            <p class="mb-5 text-center"><span class="text-[31.5px] font-bold">$90.000</span><span class="text-[14.7px] text-negro-suave/55 font-light">/mes</span></p>
+            <ul class="space-y-2.5 text-[14.7px] text-negro-suave/75 mb-5">
+              <li class="flex gap-2"><i class="ti ti-check text-verde-neto shrink-0 mt-0.5"></i> Todo lo del plan Starter</li>
+              <li class="flex gap-2"><i class="ti ti-check text-verde-neto shrink-0 mt-0.5"></i> Seguimiento de facturación vs. límite de categoría</li>
+              <li class="flex gap-2"><i class="ti ti-check text-verde-neto shrink-0 mt-0.5"></i> Alerta antes de recategorizar</li>
+              <li class="flex gap-2"><i class="ti ti-check text-verde-neto shrink-0 mt-0.5"></i> Liquidación de 1 sueldo</li>
+              <li class="flex gap-2"><i class="ti ti-check text-verde-neto shrink-0 mt-0.5"></i> Informe mensual de situación fiscal</li>
+              <li class="flex gap-2"><i class="ti ti-check text-verde-neto shrink-0 mt-0.5"></i> Videollamada 1 vez/mes</li>
+              <li class="flex gap-2"><i class="ti ti-star-filled text-verde-oscuro shrink-0 mt-0.5"></i> Planilla de costos y rentabilidad</li>
+            </ul>
+            <div class="mt-auto">
+              <a href="https://wa.me/541124738056?text=Hola%2C%20me%20interesa%20el%20plan%20Profesional."
+                 target="_blank" rel="noopener"
+                 class="inline-flex w-full items-center justify-center gap-2 bg-verde-neto hover:bg-verde-oscuro text-white text-sm font-medium px-4 py-2.5 rounded-lg transition-colors">
+                <i class="ti ti-brand-whatsapp text-base"></i> Lo quiero
+              </a>
+            </div>
+          </div>
+        </article>
+
+        <!-- Profesional Plus -->
+        <article class="flex flex-col rounded-2xl border border-black/5 bg-fondo/40 overflow-hidden shadow-sm transition-all duration-200 hover:-translate-y-1.5 hover:shadow-xl hover:border-verde-neto/40 reveal">
+          <div class="h-1.5" style="background:#534AB7"></div>
+          <div class="flex flex-col flex-1 p-6">
+            <h4 class="font-bold text-[18.9px] text-center text-verde-neto">Profesional Plus</h4>
+            <p class="text-[14.7px] text-negro-suave/55 mb-4 text-center">Monotributista con hasta 3 empleados.</p>
+            <p class="mb-5 text-center"><span class="text-[31.5px] font-bold">$115.000</span><span class="text-[14.7px] text-negro-suave/55 font-light">/mes</span></p>
+            <ul class="space-y-2.5 text-[14.7px] text-negro-suave/75 mb-5">
+              <li class="flex gap-2"><i class="ti ti-check text-verde-neto shrink-0 mt-0.5"></i> Todo lo del plan Profesional</li>
+              <li class="flex gap-2"><i class="ti ti-check text-verde-neto shrink-0 mt-0.5"></i> Hasta 3 liquidaciones de sueldos</li>
+              <li class="flex gap-2"><i class="ti ti-star-filled text-verde-oscuro shrink-0 mt-0.5"></i> Consultas ilimitadas por WhatsApp (24h)</li>
+            </ul>
+            <div class="mt-auto">
+              <a href="https://wa.me/541124738056?text=Hola%2C%20me%20interesa%20el%20plan%20Profesional%20Plus."
+                 target="_blank" rel="noopener"
+                 class="inline-flex w-full items-center justify-center gap-2 bg-verde-neto hover:bg-verde-oscuro text-white text-sm font-medium px-4 py-2.5 rounded-lg transition-colors">
+                <i class="ti ti-brand-whatsapp text-base"></i> Lo quiero
+              </a>
+            </div>
+          </div>
+        </article>
+
+        <!-- Profesional RI -->
+        <article class="flex flex-col rounded-2xl border border-black/5 bg-fondo/40 overflow-hidden shadow-sm transition-all duration-200 hover:-translate-y-1.5 hover:shadow-xl hover:border-verde-neto/40 reveal">
+          <div class="h-1.5" style="background:#0F6E56"></div>
+          <div class="flex flex-col flex-1 p-6">
+            <h4 class="font-bold text-[18.9px] text-center text-verde-neto">Profesional RI</h4>
+            <p class="text-[14.7px] text-negro-suave/55 mb-4 text-center">Responsable Inscripto (persona física).</p>
+            <p class="mb-5 text-center"><span class="text-[31.5px] font-bold">$125.000</span><span class="text-[14.7px] text-negro-suave/55 font-light">/mes</span></p>
+            <ul class="space-y-2.5 text-[14.7px] text-negro-suave/75 mb-5">
+              <li class="flex gap-2"><i class="ti ti-check text-verde-neto shrink-0 mt-0.5"></i> Altas de impuestos ARCA e IIBB local</li>
+              <li class="flex gap-2"><i class="ti ti-check text-verde-neto shrink-0 mt-0.5"></i> Alta de facturación</li>
+              <li class="flex gap-2"><i class="ti ti-check text-verde-neto shrink-0 mt-0.5"></i> Declaraciones de IVA e IIBB local mensuales</li>
+              <li class="flex gap-2"><i class="ti ti-check text-verde-neto shrink-0 mt-0.5"></i> Hasta 5 empleados · certificado PyME</li>
+              <li class="flex gap-2"><i class="ti ti-check text-verde-neto shrink-0 mt-0.5"></i> 1 asesoramiento virtual mensual</li>
+              <li class="flex gap-2"><i class="ti ti-check text-verde-neto shrink-0 mt-0.5"></i> 5 consultas por mail/mes</li>
+              <li class="flex gap-2"><i class="ti ti-check text-verde-neto shrink-0 mt-0.5"></i> 1 plan de facilidades/mes</li>
+            </ul>
+            <p class="text-[13.2px] font-bold text-negro-suave/75 mb-5">No incluye: Ganancias persona física, IIBB multiprovincias anual.</p>
+            <div class="mt-auto">
+              <a href="https://wa.me/541124738056?text=Hola%2C%20me%20interesa%20el%20plan%20Profesional%20RI."
+                 target="_blank" rel="noopener"
+                 class="inline-flex w-full items-center justify-center gap-2 bg-verde-neto hover:bg-verde-oscuro text-white text-sm font-medium px-4 py-2.5 rounded-lg transition-colors">
+                <i class="ti ti-brand-whatsapp text-base"></i> Lo quiero
+              </a>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <!-- Empresas constituidas -->
+      <h3 class="text-[19.8px] font-bold mt-14 mb-6">Empresas (SAS / SRL / SA)</h3>
+      <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+
+        <!-- Empresa Simple -->
+        <article class="flex flex-col rounded-2xl border border-black/5 bg-fondo/40 overflow-hidden shadow-sm transition-all duration-200 hover:-translate-y-1.5 hover:shadow-xl hover:border-verde-neto/40 reveal">
+          <div class="h-1.5" style="background:#0C447C"></div>
+          <div class="flex flex-col flex-1 p-6">
+            <h4 class="font-bold text-[18.9px] text-center text-verde-neto">Empresa Simple</h4>
+            <p class="text-[14.7px] text-negro-suave/55 mb-4 text-center">SAS/SRL/SA (microempresas) con hasta 5 empleados.</p>
+            <p class="mb-5 text-center"><span class="text-[31.5px] font-bold">$135.000</span><span class="text-[14.7px] text-negro-suave/55 font-light">/mes</span></p>
+            <ul class="space-y-2.5 text-[14.7px] text-negro-suave/75 mb-5">
+              <li class="flex gap-2"><i class="ti ti-check text-verde-neto shrink-0 mt-0.5"></i> Altas ARCA e IIBB local · alta de facturación</li>
+              <li class="flex gap-2"><i class="ti ti-check text-verde-neto shrink-0 mt-0.5"></i> IVA e IIBB local mensuales</li>
+              <li class="flex gap-2"><i class="ti ti-check text-verde-neto shrink-0 mt-0.5"></i> Hasta 5 empleados · certificado PyME</li>
+              <li class="flex gap-2"><i class="ti ti-check text-verde-neto shrink-0 mt-0.5"></i> 1 asesoramiento virtual mensual</li>
+              <li class="flex gap-2"><i class="ti ti-check text-verde-neto shrink-0 mt-0.5"></i> 5 consultas por mail</li>
+              <li class="flex gap-2"><i class="ti ti-check text-verde-neto shrink-0 mt-0.5"></i> 1 plan de facilidades/mes</li>
+            </ul>
+            <p class="text-[13.2px] font-bold text-negro-suave/75 mb-5">No incluye: Ganancias, IIBB multiprovincias.</p>
+            <div class="mt-auto">
+              <a href="https://wa.me/541124738056?text=Hola%2C%20me%20interesa%20el%20plan%20Empresa%20Simple."
+                 target="_blank" rel="noopener"
+                 class="inline-flex w-full items-center justify-center gap-2 bg-verde-neto hover:bg-verde-oscuro text-white text-sm font-medium px-4 py-2.5 rounded-lg transition-colors">
+                <i class="ti ti-brand-whatsapp text-base"></i> Lo quiero
+              </a>
+            </div>
+          </div>
+        </article>
+
+        <!-- Empresa Plus -->
+        <article class="flex flex-col rounded-2xl border border-black/5 bg-fondo/40 overflow-hidden shadow-sm transition-all duration-200 hover:-translate-y-1.5 hover:shadow-xl hover:border-verde-neto/40 reveal">
+          <div class="h-1.5" style="background:#1D9E75"></div>
+          <div class="flex flex-col flex-1 p-6">
+            <h4 class="font-bold text-[18.9px] text-center text-verde-neto">Empresa Plus</h4>
+            <p class="text-[14.7px] text-negro-suave/55 mb-4 text-center">SAS/SRL/SA (pequeñas empresas) con hasta 7 empleados.</p>
+            <p class="mb-5 text-center"><span class="text-[31.5px] font-bold">$165.000</span><span class="text-[14.7px] text-negro-suave/55 font-light">/mes</span></p>
+            <ul class="space-y-2.5 text-[14.7px] text-negro-suave/75 mb-5">
+              <li class="flex gap-2"><i class="ti ti-check text-verde-neto shrink-0 mt-0.5"></i> Todo lo de Empresa Simple</li>
+              <li class="flex gap-2"><i class="ti ti-check text-verde-neto shrink-0 mt-0.5"></i> Hasta 7 empleados</li>
+              <li class="flex gap-2"><i class="ti ti-check text-verde-neto shrink-0 mt-0.5"></i> Seguimiento + 2 planes de facilidades/mes</li>
+              <li class="flex gap-2"><i class="ti ti-star-filled text-verde-oscuro shrink-0 mt-0.5"></i> Asesoramiento financiero mensual</li>
+              <li class="flex gap-2"><i class="ti ti-star-filled text-verde-oscuro shrink-0 mt-0.5"></i> Planilla de costos y rentabilidad</li>
+            </ul>
+            <p class="text-[13.2px] font-bold text-negro-suave/75 mb-5">No incluye: Ganancias, IIBB multiprovincias.</p>
+            <div class="mt-auto">
+              <a href="https://wa.me/541124738056?text=Hola%2C%20me%20interesa%20el%20plan%20Empresa%20Plus."
+                 target="_blank" rel="noopener"
+                 class="inline-flex w-full items-center justify-center gap-2 bg-verde-neto hover:bg-verde-oscuro text-white text-sm font-medium px-4 py-2.5 rounded-lg transition-colors">
+                <i class="ti ti-brand-whatsapp text-base"></i> Lo quiero
+              </a>
+            </div>
+          </div>
+        </article>
+
+        <!-- Empresa Grande -->
+        <article class="flex flex-col rounded-2xl border border-black/5 bg-fondo/40 overflow-hidden shadow-sm transition-all duration-200 hover:-translate-y-1.5 hover:shadow-xl hover:border-verde-neto/40 reveal">
+          <div class="h-1.5" style="background:#1D9E75"></div>
+          <div class="flex flex-col flex-1 p-6">
+            <h4 class="font-bold text-[18.9px] text-center text-verde-neto">Empresa Grande</h4>
+            <p class="text-[14.7px] text-negro-suave/55 mb-4 text-center">Tramo 1 en adelante.</p>
+            <p class="text-[13.7px] text-negro-suave/55 mb-4 text-center">Empresas no Pymes.</p>
+            <p class="mb-5 text-center"><span class="text-[31.5px] font-bold">Consulta</span></p>
+            <ul class="space-y-2.5 text-[14.7px] text-negro-suave/75 mb-5">
+              <li class="flex gap-2"><i class="ti ti-check text-verde-neto shrink-0 mt-0.5"></i> Cotización a medida según tu operación</li>
+            </ul>
+            <div class="mt-auto">
+              <a href="https://wa.me/541124738056?text=Hola%2C%20quiero%20consultar%20por%20el%20plan%20Empresa%20Grande."
+                 target="_blank" rel="noopener"
+                 class="inline-flex w-full items-center justify-center gap-2 bg-verde-neto hover:bg-verde-oscuro text-white text-sm font-medium px-4 py-2.5 rounded-lg transition-colors">
+                <i class="ti ti-brand-whatsapp text-base"></i> Consultar
+              </a>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================== SERVICIOS PUNTUALES ====================== -->
+  <section id="servicios" class="animated-gradient py-20 lg:py-24">
+    <div class="max-w-screen-xl mx-auto px-6">
+      <div class="inline-block mb-4 reveal">
+        <h2 class="text-3xl sm:text-3xl font-bold text-white">Servicios Puntuales</h2>
+        <div class="h-[3px] w-full bg-white rounded-full mt-3"></div>
+      </div>
+      <p class="reveal text-lg text-white/85 font-light max-w-2xl mb-10">
+        Pago único, sin abono mensual. Los precios marcados como "Consulta" se cotizan por WhatsApp.
+      </p>
+
+      <div class="reveal bg-white border border-black/5 rounded-2xl shadow-sm overflow-hidden">
+        <div class="grid sm:grid-cols-2 sm:gap-x-12 px-6 sm:px-8">
+          <!-- Columna 1 -->
+          <ul>
+            <li class="flex items-center justify-between gap-4 py-4 border-b border-black/5">
+              <span>Constitución de SAS (todo incluido)</span>
+              <a href="https://wa.me/541124738056?text=Hola%2C%20quiero%20consultar%20por%20la%20constituci%C3%B3n%20de%20una%20SAS." target="_blank" rel="noopener" class="font-medium text-verde-oscuro hover:underline whitespace-nowrap">Consulta</a>
+            </li>
+            <li class="flex items-center justify-between gap-4 py-4 border-b border-black/5">
+              <span>Constitución de SRL</span>
+              <a href="https://wa.me/541124738056?text=Hola%2C%20quiero%20consultar%20por%20la%20constituci%C3%B3n%20de%20una%20SRL." target="_blank" rel="noopener" class="font-medium text-verde-oscuro hover:underline whitespace-nowrap">Consulta</a>
+            </li>
+            <li class="flex items-center justify-between gap-4 py-4 border-b border-black/5">
+              <span>Alta monotributista (sin abono mensual)</span>
+              <span class="font-medium text-verde-oscuro whitespace-nowrap">$40.000</span>
+            </li>
+            <li class="flex items-center justify-between gap-4 py-4 border-b border-black/5">
+              <span>Asesoría impositiva puntual (45 min)</span>
+              <span class="font-medium text-verde-oscuro whitespace-nowrap">$35.000</span>
+            </li>
+            <li class="flex items-center justify-between gap-4 py-4 border-b border-black/5 sm:border-b-0">
+              <span>Pack lanzamiento (SAS + 3 meses Profesional)</span>
+              <span class="font-medium text-verde-oscuro whitespace-nowrap">$410.000</span>
+            </li>
+          </ul>
+          <!-- Columna 2 -->
+          <ul>
+            <li class="flex items-center justify-between gap-4 py-4 border-b border-black/5">
+              <span>Regularización e inspección ARCA/AGIP/ARBA</span>
+              <a href="https://wa.me/541124738056?text=Hola%2C%20quiero%20consultar%20por%20una%20regularizaci%C3%B3n%20ARCA%2FAGIP%2FARBA." target="_blank" rel="noopener" class="font-medium text-verde-oscuro hover:underline whitespace-nowrap">Consulta</a>
+            </li>
+            <li class="flex items-center justify-between gap-4 py-4 border-b border-black/5">
+              <span>Plan de facilidades adicional (fuera del límite)</span>
+              <a href="https://wa.me/541124738056?text=Hola%2C%20quiero%20consultar%20por%20un%20plan%20de%20facilidades%20adicional." target="_blank" rel="noopener" class="font-medium text-verde-oscuro hover:underline whitespace-nowrap">Consultar</a>
+            </li>
+            <li class="flex items-center justify-between gap-4 py-4 border-b border-black/5">
+              <span>Balance anual (SRL/SA/SAS)</span>
+              <a href="https://wa.me/541124738056?text=Hola%2C%20quiero%20consultar%20por%20un%20balance%20anual." target="_blank" rel="noopener" class="font-medium text-verde-oscuro hover:underline whitespace-nowrap">Consulta</a>
+            </li>
+            <li class="flex items-center justify-between gap-4 py-4 border-b border-black/5">
+              <span>Liquidación Ganancias / Bienes Personales</span>
+              <a href="https://wa.me/541124738056?text=Hola%2C%20quiero%20consultar%20por%20Ganancias%20y%2Fo%20Bienes%20Personales." target="_blank" rel="noopener" class="font-medium text-verde-oscuro hover:underline whitespace-nowrap">Consulta</a>
+            </li>
+            <li class="flex items-center justify-between gap-4 py-4">
+              <span>Sueldo adicional (4° empleado en adelante)</span>
+              <span class="font-medium text-verde-oscuro whitespace-nowrap">$20.000 c/u</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="mt-10 flex justify-start reveal">
+        <a href="https://wa.me/541124738056?text=Hola%2C%20quiero%20consultar%20por%20un%20servicio%20puntual."
+           target="_blank" rel="noopener"
+           class="inline-flex items-center gap-2 bg-white hover:bg-fondo text-verde-oscuro font-medium px-7 py-3.5 rounded-lg shadow-md transition-all duration-200 hover:scale-105 hover:shadow-xl">
+          <i class="ti ti-brand-whatsapp text-xl"></i> Consultá por WhatsApp
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================== ARMADO DE SOCIEDADES ====================== -->
+  <section id="sociedades" class="bg-white py-20 lg:py-24 border-y border-black/5">
+    <div class="max-w-screen-xl mx-auto px-6">
+      <div class="inline-block mb-4 reveal">
+        <h2 class="text-3xl sm:text-3xl font-bold">Armado de Sociedades</h2>
+        <div class="h-[3px] w-full bg-verde-neto rounded-full mt-3"></div>
+      </div>
+      <p class="reveal text-lg text-negro-suave/70 font-light max-w-2xl mb-10">
+        Constituimos empresas 100% online. Trabajamos con escribanía propia, el cliente no gestiona nada.
+      </p>
+
+      <div class="grid gap-6 lg:grid-cols-3">
+
+        <!-- S.A.S. -->
+        <article class="relative flex flex-col rounded-2xl border-2 border-verde-neto bg-fondo/40 p-7 shadow-sm transition-all duration-200 hover:-translate-y-1.5 hover:shadow-xl reveal">
+          <span class="absolute top-5 right-5 text-[11px] font-medium bg-verde-neto text-white px-3 py-1 rounded-full">Más elegida</span>
+          <h3 class="text-xl font-bold mb-1">S.A.S.</h3>
+          <p class="text-sm text-negro-suave/55 mb-5">Sociedad por Acciones Simplificada</p>
+          <ul class="space-y-2.5 text-sm text-negro-suave/75 mb-6 flex-1">
+            <li class="flex gap-2"><i class="ti ti-check text-verde-neto shrink-0 mt-0.5"></i> Se constituye con CUIT · factura A al instante</li>
+            <li class="flex gap-2"><i class="ti ti-check text-verde-neto shrink-0 mt-0.5"></i> Libros digitales · amplio objeto social</li>
+            <li class="flex gap-2"><i class="ti ti-check text-verde-neto shrink-0 mt-0.5"></i> Bajo costo de tramitación · beneficio PyME</li>
+            <li class="flex gap-2"><i class="ti ti-star-filled text-verde-oscuro shrink-0 mt-0.5"></i> Apertura de cuenta bancaria</li>
+          </ul>
+          <p class="text-sm text-negro-suave/55 mb-4">Precio: consultar</p>
+          <a href="https://wa.me/541124738056?text=Hola%2C%20quiero%20constituir%20una%20S.A.S." target="_blank" rel="noopener"
+             class="inline-flex w-full items-center justify-center gap-2 bg-verde-neto hover:bg-verde-oscuro text-white text-sm font-medium px-4 py-2.5 rounded-lg transition-colors">
+            <i class="ti ti-brand-whatsapp text-base"></i> Consultar
+          </a>
+        </article>
+
+        <!-- S.R.L. -->
+        <article class="flex flex-col rounded-2xl border border-black/5 bg-fondo/40 p-7 shadow-sm transition-all duration-200 hover:-translate-y-1.5 hover:shadow-xl hover:border-verde-neto/40 reveal">
+          <h3 class="text-xl font-bold mb-1">S.R.L.</h3>
+          <p class="text-sm text-negro-suave/55 mb-5">Sociedad de Responsabilidad Limitada</p>
+          <ul class="space-y-2.5 text-sm text-negro-suave/75 mb-6 flex-1">
+            <li class="flex gap-2"><i class="ti ti-check text-verde-neto shrink-0 mt-0.5"></i> CUIT + 3 libros rubricados · sin capital mínimo</li>
+            <li class="flex gap-2"><i class="ti ti-check text-verde-neto shrink-0 mt-0.5"></i> No paga tasa anual ni presenta balances en IGJ</li>
+            <li class="flex gap-2"><i class="ti ti-check text-verde-neto shrink-0 mt-0.5"></i> Gerente con mandato indefinido · máx. 50 socios</li>
+            <li class="flex gap-2"><i class="ti ti-star-filled text-verde-oscuro shrink-0 mt-0.5"></i> Apertura de cuenta bancaria</li>
+          </ul>
+          <p class="text-sm text-negro-suave/55 mb-4">Precio: consultar</p>
+          <a href="https://wa.me/541124738056?text=Hola%2C%20quiero%20constituir%20una%20S.R.L." target="_blank" rel="noopener"
+             class="inline-flex w-full items-center justify-center gap-2 bg-verde-neto hover:bg-verde-oscuro text-white text-sm font-medium px-4 py-2.5 rounded-lg transition-colors">
+            <i class="ti ti-brand-whatsapp text-base"></i> Consultar
+          </a>
+        </article>
+
+        <!-- S.A. -->
+        <article class="flex flex-col rounded-2xl border border-black/5 bg-fondo/40 p-7 shadow-sm transition-all duration-200 hover:-translate-y-1.5 hover:shadow-xl hover:border-verde-neto/40 reveal">
+          <h3 class="text-xl font-bold mb-1">S.A.</h3>
+          <p class="text-sm text-negro-suave/55 mb-5">Sociedad Anónima</p>
+          <ul class="space-y-2.5 text-sm text-negro-suave/75 mb-6 flex-1">
+            <li class="flex gap-2"><i class="ti ti-check text-verde-neto shrink-0 mt-0.5"></i> Inscripción con CUIT · sin límite de socios</li>
+            <li class="flex gap-2"><i class="ti ti-check text-verde-neto shrink-0 mt-0.5"></i> Fácil transmisión de acciones</li>
+            <li class="flex gap-2"><i class="ti ti-check text-verde-neto shrink-0 mt-0.5"></i> Directorio cada 3 años · balance anual en IGJ</li>
+            <li class="flex gap-2"><i class="ti ti-star-filled text-verde-oscuro shrink-0 mt-0.5"></i> Apertura de cuenta bancaria</li>
+          </ul>
+          <p class="text-sm text-negro-suave/55 mb-4">Precio: consultar</p>
+          <a href="https://wa.me/541124738056?text=Hola%2C%20quiero%20constituir%20una%20S.A." target="_blank" rel="noopener"
+             class="inline-flex w-full items-center justify-center gap-2 bg-verde-neto hover:bg-verde-oscuro text-white text-sm font-medium px-4 py-2.5 rounded-lg transition-colors">
+            <i class="ti ti-brand-whatsapp text-base"></i> Consultar
+          </a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================== CONDICIONES COMERCIALES ====================== -->
+  <section id="condiciones" class="py-20 lg:py-24">
+    <div class="max-w-screen-xl mx-auto px-6">
+      <div class="inline-block mb-10 reveal">
+        <h2 class="text-3xl sm:text-3xl font-bold">Condiciones Comerciales</h2>
+        <div class="h-[3px] w-full bg-verde-neto rounded-full mt-3"></div>
+      </div>
+
+      <div id="cond-grid" class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 reveal">
+        <div class="cond-card flex items-start gap-4 bg-verde-neto rounded-2xl p-7">
+          <i class="ti ti-calendar-clock text-white text-2xl shrink-0 mt-0.5"></i>
+          <div><p class="font-bold text-lg text-white">Permanencia mínima</p><p class="text-base text-white/85">3 meses corridos desde el inicio.</p></div>
+        </div>
+        <div class="cond-card flex items-start gap-4 bg-verde-neto rounded-2xl p-7">
+          <i class="ti ti-bell text-white text-2xl shrink-0 mt-0.5"></i>
+          <div><p class="font-bold text-lg text-white">Aviso de baja</p><p class="text-base text-white/85">15 días antes del próximo vencimiento.</p></div>
+        </div>
+        <div class="cond-card flex items-start gap-4 bg-verde-neto rounded-2xl p-7">
+          <i class="ti ti-credit-card text-white text-2xl shrink-0 mt-0.5"></i>
+          <div><p class="font-bold text-lg text-white">Forma de pago</p><p class="text-base text-white/85">Adelantado, primeros días de cada mes.</p></div>
+        </div>
+        <div class="cond-card flex items-start gap-4 bg-verde-neto rounded-2xl p-7">
+          <i class="ti ti-mail text-white text-2xl shrink-0 mt-0.5"></i>
+          <div><p class="font-bold text-lg text-white">Aviso de aumento</p><p class="text-base text-white/85">30 días de anticipación por email.</p></div>
+        </div>
+        <div class="cond-card flex items-start gap-4 bg-verde-neto rounded-2xl p-7">
+          <i class="ti ti-trending-up text-white text-2xl shrink-0 mt-0.5"></i>
+          <div><p class="font-bold text-lg text-white">Actualización</p><p class="text-base text-white/85">Cada 3 meses por IPC.</p></div>
+        </div>
+        <div class="cond-card flex items-start gap-4 bg-verde-neto rounded-2xl p-7">
+          <i class="ti ti-info-circle text-white text-2xl shrink-0 mt-0.5"></i>
+          <div><p class="font-bold text-lg text-white">No incluido en abonos</p><p class="text-base text-white/85">Ganancias (cotización oct–dic), IIBB multiprovincias, planes de facilidades adicionales y empleados extra ($20.000 c/u).</p></div>
+        </div>
+      </div>
+
+      <!-- Cláusula de permanencia (texto completo, tal cual) -->
+      <div class="mt-8 bg-verde-neto/5 border border-verde-neto/20 rounded-2xl p-6 sm:p-8 reveal">
+        <p class="text-[15.4px] font-bold text-negro-suave mb-3">Cláusula de permanencia</p>
+        <p class="text-[15.4px] text-negro-suave leading-relaxed">
+          El servicio tiene una permanencia mínima de 3 (tres) meses corridos desde la fecha de inicio.
+          El pago se realiza de forma adelantada los primeros 5 días de cada mes. Para solicitar la baja
+          del servicio una vez cumplido el período mínimo, el cliente debe notificarlo con al menos 15 días
+          de anticipación al próximo vencimiento. En caso de baja anticipada, se facturarán los meses
+          restantes hasta completar el período mínimo.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================== FOOTER ====================== -->
+  <footer class="bg-negro-suave text-white">
+    <div class="max-w-screen-xl mx-auto px-6 py-14">
+      <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-10">
+        <div>
+          <div class="flex items-center gap-2.5 mb-3">
+            <span class="inline-flex items-center justify-center w-9 h-9 rounded-lg bg-verde-neto text-white font-bold text-xl leading-none">N</span>
+            <span class="flex flex-col leading-none">
+              <span class="text-2xl font-normal lowercase tracking-tight text-white">soyneto.ar</span>
+              <span class="mt-0.5 h-[2px] w-[90%] bg-verde-neto rounded-full"></span>
+            </span>
+          </div>
+          <p class="text-white/80">Tu negocio, en claro.</p>
+          <p class="text-white/55 text-sm mt-1">Sin vueltas. Sin papeles. Sin sorpresas.</p>
+        </div>
+
+        <div class="flex flex-col gap-3 text-[15px]">
+          <a href="https://www.instagram.com/soyneto.ar" target="_blank" rel="noopener" class="inline-flex items-center gap-2 text-white/85 hover:text-white transition-colors">
+            <i class="ti ti-brand-instagram text-lg"></i> @soyneto.ar
+          </a>
+          <a href="https://www.tiktok.com/@soyneto.ar" target="_blank" rel="noopener" class="inline-flex items-center gap-2 text-white/85 hover:text-white transition-colors">
+            <i class="ti ti-brand-tiktok text-lg"></i> @soyneto.ar
+          </a>
+          <a href="mailto:soyneto.ar@gmail.com" class="inline-flex items-center gap-2 text-white/85 hover:text-white transition-colors">
+            <i class="ti ti-mail text-lg"></i> soyneto.ar@gmail.com
+          </a>
+          <a href="https://wa.me/541124738056?text=Hola%2C%20quiero%20una%20consulta%20gratis." target="_blank" rel="noopener" class="inline-flex items-center gap-2 text-white/85 hover:text-white transition-colors">
+            <i class="ti ti-brand-whatsapp text-lg"></i> WhatsApp
+          </a>
+          <a href="../" class="self-start inline-flex items-center gap-1 bg-white/85 text-negro-suave font-bold hover:bg-white px-4 py-1.5 rounded-md transition-colors">
+            <i class="ti ti-arrow-left text-base" aria-hidden="true"></i> JLC
+          </a>
+        </div>
+      </div>
+
+      <div class="border-t border-white/15 mt-10 pt-6 text-center text-sm text-white/50">
+        © <span id="anio">2026</span> soyneto.ar. Todos los derechos reservados.
+        <span class="mx-2 text-white/25">·</span> Designed by JeyX Digital
+      </div>
+    </div>
+  </footer>
+
+  <!-- ====================== POP-UP DE BIENVENIDA ======================
+       Aparece al cargar la página. La imagen es el contenido del pop-up.
+       TODO: colocar la imagen en  neto/assets/img/pop-up.png
+  ==================================================================== -->
+  <div id="popup" class="fixed inset-0 z-[100] hidden items-center justify-center p-4">
+    <!-- Fondo oscurecido (cierra al hacer clic) -->
+    <div class="popup-backdrop absolute inset-0 bg-negro-suave/70 backdrop-blur-sm" aria-hidden="true"></div>
+
+    <!-- Panel: mitad texto (sólido) + mitad imagen -->
+    <div class="popup-panel relative w-full max-w-2xl overflow-hidden rounded-2xl bg-white shadow-2xl" role="dialog" aria-modal="true" aria-label="Promoción">
+      <!-- Cerrar -->
+      <button type="button" class="popup-close absolute top-3 right-3 z-10 inline-flex items-center justify-center w-9 h-9 rounded-full bg-white/90 text-negro-suave shadow hover:bg-fondo transition-colors" aria-label="Cerrar">
+        <i class="ti ti-x text-xl"></i>
+      </button>
+
+      <div class="grid sm:grid-cols-2">
+        <!-- Texto (sólido, colores de marca) -->
+        <div class="order-2 sm:order-1 p-8 sm:p-9 flex flex-col justify-center border-l-4 sm:border-l-0 sm:border-r-4 border-verde-neto">
+          <h3 class="font-bold text-2xl sm:text-[1.7rem] leading-tight text-verde-oscuro">
+            Obtené la ayuda contable y legal que tu negocio necesita
+          </h3>
+          <p class="mt-4 text-negro-suave/70">Escribinos ahora por <strong class="text-negro-suave">WhatsApp…</strong></p>
+          <a href="https://wa.me/541124738056?text=Hola%2C%20quiero%20una%20consulta%20gratis."
+             target="_blank" rel="noopener"
+             class="mt-5 inline-flex items-center justify-center gap-2 bg-verde-neto hover:bg-verde-oscuro text-white font-bold px-6 py-3 rounded-lg transition-colors">
+            <i class="ti ti-brand-whatsapp text-xl"></i> ¡Hablemos!
+          </a>
+        </div>
+
+        <!-- Imagen (la foto). TODO: colocar en assets/img/pop-up.png -->
+        <div class="relative order-1 sm:order-2 h-40 sm:h-auto">
+          <img src="assets/img/pop-up.png" alt=""
+               class="w-full h-full object-cover" aria-hidden="true" />
+          <!-- Tinte oscuro para apagar la foto -->
+          <div class="absolute inset-0 bg-verde-oscuro/40" aria-hidden="true"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Selector de idioma flotante (círculo plegable; se expande al hover/tocar) -->
+  <div class="fixed bottom-4 right-4 z-[110] group" data-i18n-skip>
+    <div class="flex items-center rounded-full bg-negro-suave/90 backdrop-blur border border-white/15 shadow-lg text-white overflow-hidden transition-all duration-300">
+      <div class="flex items-center gap-0.5 whitespace-nowrap max-w-0 opacity-0 group-hover:max-w-[170px] group-hover:opacity-100 group-focus-within:max-w-[170px] group-focus-within:opacity-100 transition-all duration-300">
+        <button type="button" data-lang-btn="es" class="ml-2 px-2 py-0.5 text-sm rounded-full transition-colors hover:text-verde-neto aria-[current=true]:bg-verde-neto aria-[current=true]:text-white aria-[current=true]:font-semibold">ES</button>
+        <button type="button" data-lang-btn="en" class="px-2 py-0.5 text-sm rounded-full transition-colors hover:text-verde-neto aria-[current=true]:bg-verde-neto aria-[current=true]:text-white aria-[current=true]:font-semibold">EN</button>
+        <button type="button" data-lang-btn="pt" class="px-2 py-0.5 text-sm rounded-full transition-colors hover:text-verde-neto aria-[current=true]:bg-verde-neto aria-[current=true]:text-white aria-[current=true]:font-semibold">PT</button>
+      </div>
+      <button type="button" class="w-12 h-12 shrink-0 inline-flex items-center justify-center" aria-label="Cambiar idioma / Change language">
+        <i class="ti ti-language text-xl" aria-hidden="true"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- i18n: diccionario (soyneto) + motor compartido -->
+  <script src="assets/js/i18n-soyneto.js"></script>
+  <script src="../assets/js/i18n.js"></script>
+  <script src="assets/js/neto.js"></script>
+</body>
+</html>

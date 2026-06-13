@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- Marca que hay JS antes de pintar, para que el reveal no oculte contenido si JS falla -->
+  <script>document.documentElement.classList.add('js');</script>
+  <title>JLC Global Advisory — Operar en LATAM, sin fricción</title>
+  <meta name="description" content="Consultoría de negocios para instalarse, operar y crecer en Argentina y LATAM sin lidiar con la complejidad local. Estructura, impuestos, FP&A y expansión a Paraguay y Brasil." />
+
+  <!-- ===== Open Graph ===== -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="JLC Global Advisory — Operar en LATAM, sin fricción" />
+  <meta property="og:description" content="Business Consulting & LATAM Expansion. Argentina · Paraguay · Brasil." />
+  <meta property="og:locale" content="es_AR" />
+
+  <link rel="icon" type="image/png" href="assets/img/favicon.png" />
+
+  <!-- ===== Tipografías ===== -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500&display=swap" rel="stylesheet" />
+
+  <!-- ===== Iconos (estilo línea) ===== -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.31.0/dist/tabler-icons.min.css" />
+
+  <!-- ===== Tailwind CSS (CDN) + tokens de marca ===== -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'navy-principal': '#0A1F44',
+            'navy-secundario': '#162D5E',
+            'gold-principal': '#C8952A',
+            'gold-claro': '#E8B84B',
+          },
+          fontFamily: {
+            serif: ['Georgia', 'serif'],
+            sans: ['"DM Sans"', 'sans-serif'],
+          },
+        },
+      },
+    };
+  </script>
+
+  <style>
+    html { scroll-behavior: smooth; }
+    /* Compensa la navbar fija al saltar a una ancla */
+    section[id] { scroll-margin-top: 112px; }
+    body { font-family: "DM Sans", sans-serif; }
+    /* Hairline dorado — recurso de marca */
+    .hairline { width: 56px; height: 2px; background: #C8952A; }
+
+    /* Cards — efecto hover: elevación + sombra al pasar el mouse */
+    .card-hover { transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease; }
+    .card-hover:hover { transform: translateY(-6px); box-shadow: 0 20px 45px -15px rgba(10, 31, 68, .35); }
+
+    /* Reveal on scroll — fade + leve subida (solo con JS, ver clase .js en <html>) */
+    .js .reveal { opacity: 0; transform: translateY(24px); transition: opacity .6s cubic-bezier(.4, 0, .2, 1), transform .6s cubic-bezier(.4, 0, .2, 1); }
+    .js .reveal.is-visible { opacity: 1; transform: none; }
+
+    /* Menú mobile — despliegue (slide) suave + cierre */
+    #mobile-menu { max-height: 0; opacity: 0; overflow: hidden; transition: max-height .35s ease, opacity .3s ease; }
+    #mobile-menu.is-open { max-height: 85vh; opacity: 1; overflow-y: auto; }
+
+    /* Casos — modal/lightbox al tocar la lupa (fade del fondo + zoom de la card) */
+    #caso-modal { opacity: 0; transition: opacity .25s ease; }
+    #caso-modal.is-open { opacity: 1; }
+    #caso-modal .js-modal-panel { transform: scale(.95); transition: transform .25s ease; }
+    #caso-modal.is-open .js-modal-panel { transform: scale(1); }
+
+    /* Contacto — constelación de nodos animada: deriva + titileo + aparición + flujo + latido */
+    @keyframes netDrift {
+      0%, 100% { transform: scale(1.06) translate(0, 0) rotate(0deg); }
+      50%      { transform: scale(1.06) translate(-2%, 1.5%) rotate(.8deg); }
+    }
+    .net-drift { animation: netDrift 20s ease-in-out infinite; transform-origin: center; }
+    /* titileo: oscila tenue ↔ visible */
+    @keyframes netPulse { 0%, 100% { opacity: .12; } 50% { opacity: .7; } }
+    .net-pulse { animation: netPulse 5s ease-in-out infinite; }
+    /* aparece y desaparece: se difumina hasta 0 y vuelve */
+    @keyframes netBlink { 0% { opacity: 0; } 30% { opacity: .6; } 60% { opacity: .6; } 100% { opacity: 0; } }
+    .net-blink { animation: netBlink 7s ease-in-out infinite; }
+    /* flujo: un pulso de luz viaja por la línea (como datos circulando) */
+    @keyframes netFlow { from { stroke-dashoffset: 210; } to { stroke-dashoffset: 0; } }
+    .net-flow { stroke-dasharray: 6 204; animation: netFlow 3.5s linear infinite; }
+    /* latido: el nodo crece y se ilumina */
+    @keyframes netGlow { 0%, 100% { r: 3.5; opacity: .35; } 50% { r: 6.5; opacity: .9; } }
+    .net-glow { animation: netGlow 4.5s ease-in-out infinite; }
+
+    /* Servicios — selector: borde dorado siempre, sin estado sólido de selección */
+    .js-tab { color: #C8952A; background: transparent; }
+    .js-tab:hover { background: rgba(200, 149, 42, .1); }
+
+    /* Servicios — unidades apiladas; el scroll-margin compensa la navbar fija */
+    .service-card { scroll-margin-top: 112px; }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .card-hover:hover { transform: none; }
+      #mobile-menu { transition: none; }
+      #caso-modal, #caso-modal .js-modal-panel { transition: none; }
+      .net-drift, .net-pulse, .net-blink, .net-flow, .net-glow { animation: none; opacity: .35; }
+      .js .reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
+    }
+  </style>
+</head>
+
+<body class="font-sans text-navy-principal antialiased">
+
+  <!-- Skip link (accesibilidad) -->
+  <a href="#inicio" class="sr-only focus:not-sr-only focus:absolute focus:z-[60] focus:top-3 focus:left-3 focus:bg-gold-principal focus:text-navy-principal focus:px-4 focus:py-2 focus:rounded">
+    Saltar al contenido
+  </a>
+
+  <!-- =====================================================================
+       NAVBAR — fija, superpuesta, scroll suave
+  ====================================================================== -->
+  <header id="navbar" class="fixed top-0 inset-x-0 z-50 bg-navy-principal/90 backdrop-blur-sm border-b border-white/10">
+    <nav class="max-w-screen-2xl mx-auto px-6 xl:px-10 h-20 lg:h-24 flex items-center justify-between" aria-label="Navegación principal">
+
+      <!-- Logo -->
+      <a href="#inicio" class="flex items-center gap-3 shrink-0" aria-label="JLC Global Advisory — Inicio">
+        <!-- Monograma JLC con motivo de nodos (recreado, fondo transparente) -->
+        <img src="assets/img/logo.png" alt="" class="h-12 xl:h-[4.24rem] w-auto shrink-0" />
+        <span class="flex flex-col leading-tight">
+          <span class="font-serif font-bold text-white text-base sm:text-lg xl:text-[1.4rem] tracking-wide">JLC GLOBAL ADVISORY</span>
+          <span class="text-white/55 text-[9px] xl:text-[11px] tracking-[0.06em]">BUSINESS CONSULTING &amp; LATAM EXPANSION</span>
+          <span class="mt-1 h-px w-full bg-gold-principal" aria-hidden="true"></span>
+        </span>
+      </a>
+
+      <!-- Enlaces (desktop) -->
+      <ul class="hidden lg:flex items-center gap-4 xl:gap-7 text-base xl:text-[1.1rem] text-white/90">
+        <li><a href="#inicio" class="hover:text-gold-claro transition-colors">Inicio</a></li>
+        <li class="relative group">
+          <a href="#servicios" class="flex items-center gap-1 hover:text-gold-claro transition-colors">
+            Servicios
+            <i class="ti ti-chevron-down text-xs transition-transform group-hover:rotate-180" aria-hidden="true"></i>
+          </a>
+          <!-- Submenú desplegable de servicios -->
+          <div class="absolute left-0 top-full pt-3 hidden group-hover:block group-focus-within:block">
+            <ul class="w-max max-w-[90vw] bg-navy-secundario border border-white/10 rounded-lg shadow-xl py-2">
+              <li>
+                <a href="#servicios" data-goto-service="0" class="block whitespace-nowrap px-4 py-2.5 text-[0.96rem] text-white/85 hover:bg-white/5 hover:text-gold-claro transition-colors">
+                  <span class="text-gold-principal font-serif font-bold mr-2">01</span>Gestión Empresarial &amp; Backoffice
+                </a>
+              </li>
+              <li>
+                <a href="#servicios" data-goto-service="1" class="block whitespace-nowrap px-4 py-2.5 text-[0.96rem] text-white/85 hover:bg-white/5 hover:text-gold-claro transition-colors">
+                  <span class="text-gold-principal font-serif font-bold mr-2">02</span>FP&amp;A &amp; Control de Gestión
+                </a>
+              </li>
+              <li>
+                <a href="#servicios" data-goto-service="2" class="block whitespace-nowrap px-4 py-2.5 text-[0.96rem] text-white/85 hover:bg-white/5 hover:text-gold-claro transition-colors">
+                  <span class="text-gold-principal font-serif font-bold mr-2">03</span>Expansión &amp; Market Entry LATAM
+                </a>
+              </li>
+            </ul>
+          </div>
+        </li>
+        <li><a href="#quienes-somos" class="hover:text-gold-claro transition-colors">Quiénes Somos</a></li>
+        <li><a href="#casos" class="hover:text-gold-claro transition-colors">Casos de Éxito</a></li>
+        <li><a href="#contacto" class="hover:text-gold-claro transition-colors">Contacto</a></li>
+        <li class="ml-3 xl:ml-6 pl-3 xl:pl-6 border-l border-white/15">
+          <a href="soyneto/" class="inline-flex items-center gap-1.5 bg-gold-principal hover:bg-gold-claro text-navy-principal px-3 py-1.5 xl:px-4 xl:py-2 rounded-md transition-colors">
+            soyneto.ar <i class="ti ti-external-link text-xs" aria-hidden="true"></i>
+          </a>
+        </li>
+      </ul>
+
+      <!-- Hamburguesa (mobile) -->
+      <button id="menu-toggle" type="button" class="lg:hidden text-white text-2xl p-1" aria-label="Abrir menú" aria-expanded="false" aria-controls="mobile-menu">
+        <i class="ti ti-menu-2" aria-hidden="true"></i>
+      </button>
+    </nav>
+
+    <!-- Menú mobile (colapsable) -->
+    <div id="mobile-menu" class="lg:hidden absolute top-full inset-x-0 border-t border-white/10 bg-navy-principal/95 backdrop-blur-2xl">
+      <ul class="max-w-screen-2xl mx-auto flex flex-col px-6 lg:px-10 py-4 gap-1 text-white/90">
+        <li><a href="#inicio" class="block py-2 hover:text-gold-claro">Inicio</a></li>
+        <li>
+          <a href="#servicios" class="block py-2 hover:text-gold-claro">Servicios</a>
+          <ul class="ml-3 border-l border-white/10 pl-4 pb-1">
+            <li><a href="#servicios" data-goto-service="0" class="block py-1.5 text-sm text-white/70 hover:text-gold-claro">Gestión Empresarial &amp; Backoffice</a></li>
+            <li><a href="#servicios" data-goto-service="1" class="block py-1.5 text-sm text-white/70 hover:text-gold-claro">FP&amp;A &amp; Control de Gestión</a></li>
+            <li><a href="#servicios" data-goto-service="2" class="block py-1.5 text-sm text-white/70 hover:text-gold-claro">Expansión &amp; Market Entry LATAM</a></li>
+          </ul>
+        </li>
+        <li><a href="#quienes-somos" class="block py-2 hover:text-gold-claro">Quiénes Somos</a></li>
+        <li><a href="#casos" class="block py-2 hover:text-gold-claro">Casos de Éxito</a></li>
+        <li><a href="#contacto" class="block py-2 hover:text-gold-claro">Contacto</a></li>
+        <li>
+          <a href="soyneto/" class="inline-flex items-center gap-1.5 mt-2 bg-gold-principal hover:bg-gold-claro text-navy-principal px-4 py-2 rounded-md transition-colors">
+            soyneto.ar <i class="ti ti-external-link text-xs" aria-hidden="true"></i>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </header>
+
+  <main>
+    <!-- =====================================================================
+         HERO — #inicio · foto banner full-bleed + overlay navy
+    ====================================================================== -->
+    <section id="inicio" class="relative min-h-screen flex items-center">
+      <!-- Video banner (full-bleed). Poster = banner.png como fallback. -->
+      <video
+        class="absolute inset-0 w-full h-full object-cover bg-navy-principal"
+        autoplay muted loop playsinline preload="metadata"
+        poster="assets/img/banner.png"
+        aria-hidden="true">
+        <source src="assets/img/banner.mp4" type="video/mp4" />
+      </video>
+      <!-- Overlay navy para legibilidad -->
+      <div class="absolute inset-0 bg-gradient-to-r from-navy-principal/85 via-navy-principal/55 to-navy-principal/20" aria-hidden="true"></div>
+
+      <!-- Contenido (alineado a la izquierda, contenedor centrado) -->
+      <div class="relative max-w-screen-xl mx-auto px-6 pt-28 pb-20 w-full">
+        <div class="max-w-2xl">
+          <div class="hairline mb-6 reveal"></div>
+          <h1 class="reveal font-serif font-bold text-white text-4xl sm:text-5xl lg:text-6xl leading-tight">
+            Operar en LATAM,<br />sin <span class="text-gold-claro">fricción.</span>
+          </h1>
+          <p class="reveal mt-6 text-white/85 text-lg leading-relaxed">
+            Ayudamos a empresas a instalarse, operar y crecer en Argentina y LATAM sin lidiar con la complejidad
+            local. Nos ocupamos de estructura, impuestos, FP&amp;A y operacion para que el cliente se enfoque en
+            crecer.
+          </p>
+          <a href="#contacto" data-cta-form class="reveal mt-9 inline-flex items-center gap-2 bg-gold-principal hover:bg-gold-claro text-navy-principal font-medium text-base px-7 py-3.5 rounded-md transition-colors">
+            Agendar reunión
+            <i class="ti ti-arrow-right" aria-hidden="true"></i>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         SERVICIOS — #servicios · selector 1·2·3 con giro 3D (flip) entre cards
+    ====================================================================== -->
+    <section id="servicios" class="bg-navy-principal/[0.03] py-20 lg:py-28">
+      <div class="max-w-screen-xl mx-auto px-6">
+
+        <header class="mb-10 reveal">
+          <p class="text-gold-principal font-medium tracking-widest uppercase text-sm">Servicios</p>
+          <div class="hairline mt-3"></div>
+          <h2 class="font-serif font-bold text-3xl sm:text-4xl text-navy-principal mt-4">Tres unidades, una sola firma.</h2>
+        </header>
+
+        <!-- Selector: hace scroll a cada unidad; se resalta la que estás viendo -->
+        <div class="flex items-center gap-3 mb-10 flex-wrap justify-center sm:justify-start reveal" aria-label="Explorar servicios">
+          <span class="text-sm text-navy-principal/60 mr-1">Explorar:</span>
+          <button type="button" data-target="panel-1" aria-selected="true" class="js-tab w-12 h-12 rounded-full border-2 border-gold-principal font-serif font-bold text-lg transition-colors" aria-label="Ir a Gestión Empresarial y Backoffice">1</button>
+          <button type="button" data-target="panel-2" aria-selected="false" class="js-tab w-12 h-12 rounded-full border-2 border-gold-principal font-serif font-bold text-lg transition-colors" aria-label="Ir a FP&A y Control de Gestión">2</button>
+          <button type="button" data-target="panel-3" aria-selected="false" class="js-tab w-12 h-12 rounded-full border-2 border-gold-principal font-serif font-bold text-lg transition-colors" aria-label="Ir a Expansión y Market Entry LATAM">3</button>
+        </div>
+
+        <!-- Unidades apiladas (una debajo de la otra) -->
+        <div class="space-y-8">
+
+          <!-- U1 -->
+          <article id="panel-1" class="service-card reveal flex flex-col bg-white border border-navy-principal/10 rounded-xl p-8 lg:p-10">
+            <div class="flex flex-col items-center text-center gap-4 flex-1 sm:flex-row sm:items-start sm:text-left sm:gap-5">
+              <span class="shrink-0 font-serif font-bold text-4xl text-gold-principal/40 leading-none">01</span>
+              <div class="w-full sm:w-auto flex-1 flex flex-col">
+                <h3 class="font-serif font-bold text-2xl text-navy-principal">Gestión Empresarial &amp; Backoffice</h3>
+                <p class="text-sm text-navy-principal/50 font-medium">Business Management</p>
+                <p class="mt-4 text-navy-principal/75 leading-relaxed">
+                  Solución integral para empresas que necesitan operar de forma ordenada, cumplir con sus
+                  obligaciones y tener control administrativo y contable.
+                </p>
+                <div class="mt-6 flex-1 flex flex-col sm:flex-row gap-6">
+                  <!-- Columna 1: servicios + cliente ideal (debajo) -->
+                  <div class="sm:flex-[3] flex flex-col gap-6">
+                    <div>
+                      <h4 class="text-sm font-medium uppercase tracking-wide text-navy-secundario mb-3">Servicios</h4>
+                      <ul class="space-y-2 text-navy-principal/75 text-sm">
+                        <li class="flex gap-2 justify-center sm:justify-start"><span class="text-gold-principal mt-0.5">›</span> Contabilidad e impuestos (cumplimiento mensual y anual)</li>
+                        <li class="flex gap-2 justify-center sm:justify-start"><span class="text-gold-principal mt-0.5">›</span> Liquidación de sueldos (payroll) y RRHH</li>
+                        <li class="flex gap-2 justify-center sm:justify-start"><span class="text-gold-principal mt-0.5">›</span> Facturación y tesorería</li>
+                        <li class="flex gap-2 justify-center sm:justify-start"><span class="text-gold-principal mt-0.5">›</span> Cumplimiento normativo y societario</li>
+                        <li class="flex gap-2 justify-center sm:justify-start"><span class="text-gold-principal mt-0.5">›</span> Administración integral externalizada</li>
+                      </ul>
+                    </div>
+                    <div class="bg-navy-principal/[0.03] rounded-lg p-5">
+                      <h4 class="text-sm font-medium uppercase tracking-wide text-gold-principal mb-2">¿Para quién es este servicio?</h4>
+                      <p class="text-navy-principal/75 text-sm leading-relaxed">Empresas que necesitan operar con orden y cumplir sus obligaciones sin distraerse del negocio — desde PyMEs locales hasta compañías extranjeras recién instaladas.</p>
+                    </div>
+                  </div>
+                  <!-- Columna 2: imagen. TODO: reemplazar src/alt por la imagen real. -->
+                  <figure class="service-img sm:flex-[2] min-h-[180px] rounded-lg overflow-hidden bg-navy-principal/[0.03]">
+                    <img class="w-full h-full object-cover" src="assets/img/servicio-1.jpg" alt="Gestión Empresarial y Backoffice" />
+                  </figure>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <!-- U2 -->
+          <article id="panel-2" class="service-card reveal flex flex-col bg-white border border-navy-principal/10 rounded-xl p-8 lg:p-10">
+            <div class="flex flex-col items-center text-center gap-4 flex-1 sm:flex-row sm:items-start sm:text-left sm:gap-5">
+              <span class="shrink-0 font-serif font-bold text-4xl text-gold-principal/40 leading-none">02</span>
+              <div class="w-full sm:w-auto flex-1 flex flex-col">
+                <h3 class="font-serif font-bold text-2xl text-navy-principal">FP&amp;A &amp; Control de Gestión</h3>
+                <p class="text-sm text-navy-principal/50 font-medium">FP&amp;A &amp; Financial Control (Controller)</p>
+                <p class="mt-4 text-navy-principal/75 leading-relaxed">
+                  Combina Financial Planning &amp; Analysis con funciones de Controller. Principal
+                  diferenciador frente a estudios contables tradicionales.
+                </p>
+                <div class="mt-6 flex-1 flex flex-col sm:flex-row gap-6">
+                  <!-- Columna 1: servicios + cliente ideal (debajo) -->
+                  <div class="sm:flex-[3] flex flex-col gap-6">
+                    <div>
+                      <h4 class="text-sm font-medium uppercase tracking-wide text-navy-secundario mb-3">Servicios</h4>
+                      <ul class="space-y-2 text-navy-principal/75 text-sm">
+                        <li class="flex gap-2 justify-center sm:justify-start"><span class="text-gold-principal mt-0.5">›</span> Planificación y presupuestación (budgeting &amp; forecasting)</li>
+                        <li class="flex gap-2 justify-center sm:justify-start"><span class="text-gold-principal mt-0.5">›</span> Análisis de variaciones presupuestarias vs. real</li>
+                        <li class="flex gap-2 justify-center sm:justify-start"><span class="text-gold-principal mt-0.5">›</span> Reporting financiero gerencial en español e inglés</li>
+                        <li class="flex gap-2 justify-center sm:justify-start"><span class="text-gold-principal mt-0.5">›</span> KPIs y tableros de control ejecutivo</li>
+                        <li class="flex gap-2 justify-center sm:justify-start"><span class="text-gold-principal mt-0.5">›</span> Control interno, cierre mensual y supervisión contable</li>
+                        <li class="flex gap-2 justify-center sm:justify-start"><span class="text-gold-principal mt-0.5">›</span> Análisis de rentabilidad de nuevos negocios y proyectos</li>
+                        <li class="flex gap-2 justify-center sm:justify-start"><span class="text-gold-principal mt-0.5">›</span> Interfaz con casa matriz para multinacionales</li>
+                      </ul>
+                    </div>
+                    <div class="bg-navy-principal/[0.03] rounded-lg p-5">
+                      <h4 class="text-sm font-medium uppercase tracking-wide text-gold-principal mb-2">¿Para quién es este servicio?</h4>
+                      <p class="text-navy-principal/75 text-sm leading-relaxed">Empresas que toman decisiones importantes pero no tienen información financiera real para respaldarlas — y no quieren el costo de un CFO interno a tiempo completo.</p>
+                    </div>
+                  </div>
+                  <!-- Columna 2: imagen. TODO: reemplazar src/alt por la imagen real. -->
+                  <figure class="service-img sm:flex-[2] min-h-[180px] rounded-lg overflow-hidden bg-navy-principal/[0.03]">
+                    <img class="w-full h-full object-cover" src="assets/img/servicio-2.jpg" alt="FP&A y Control de Gestión" />
+                  </figure>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <!-- U3 -->
+          <article id="panel-3" class="service-card reveal flex flex-col bg-white border border-navy-principal/10 rounded-xl p-8 lg:p-10">
+            <div class="flex flex-col items-center text-center gap-4 flex-1 sm:flex-row sm:items-start sm:text-left sm:gap-5">
+              <span class="shrink-0 font-serif font-bold text-4xl text-gold-principal/40 leading-none">03</span>
+              <div class="w-full sm:w-auto flex-1">
+                <h3 class="font-serif font-bold text-2xl text-navy-principal">Expansión &amp; Market Entry LATAM</h3>
+                <p class="text-sm text-navy-principal/50 font-medium">Regional Expansion &amp; Market Entry</p>
+                <p class="mt-4 text-navy-principal/75 leading-relaxed">
+                  Acompañamos a empresas extranjeras que quieren instalarse en Argentina y a empresas
+                  argentinas que quieren expandirse a Paraguay o Brasil — con estructura legal, fiscal y
+                  operativa real desde el primer día.
+                </p>
+                <div class="grid gap-6 sm:grid-cols-2 mt-6">
+                  <div>
+                    <h4 class="text-sm font-medium uppercase tracking-wide text-navy-secundario mb-3">Entrada a Argentina</h4>
+                    <ul class="space-y-2 text-navy-principal/75 text-sm">
+                      <li class="flex gap-2 justify-center sm:justify-start"><span class="text-gold-principal mt-0.5">›</span> Constitución de sociedad (SAS / SA / SRL)</li>
+                      <li class="flex gap-2 justify-center sm:justify-start"><span class="text-gold-principal mt-0.5">›</span> Domicilio legal y fiscal para empresas extranjeras</li>
+                      <li class="flex gap-2 justify-center sm:justify-start"><span class="text-gold-principal mt-0.5">›</span> Diseño de estructura fiscal y societaria</li>
+                      <li class="flex gap-2 justify-center sm:justify-start"><span class="text-gold-principal mt-0.5">›</span> Registraciones impositivas y habilitaciones</li>
+                      <li class="flex gap-2 justify-center sm:justify-start"><span class="text-gold-principal mt-0.5">›</span> Setup operativo completo y primer payroll</li>
+                      <li class="flex gap-2 justify-center sm:justify-start"><span class="text-gold-principal mt-0.5">›</span> Representación local ante organismos y representante legal</li>
+                    </ul>
+                  </div>
+                  <div>
+                    <h4 class="text-sm font-medium uppercase tracking-wide text-navy-secundario mb-3">Expansión a Paraguay y Brasil</h4>
+                    <ul class="space-y-2 text-navy-principal/75 text-sm">
+                      <li class="flex gap-2 justify-center sm:justify-start"><span class="text-gold-principal mt-0.5">›</span> Análisis de viabilidad y comparativa fiscal entre jurisdicciones</li>
+                      <li class="flex gap-2 justify-center sm:justify-start"><span class="text-gold-principal mt-0.5">›</span> Estructuración legal y corporativa en destino</li>
+                      <li class="flex gap-2 justify-center sm:justify-start"><span class="text-gold-principal mt-0.5">›</span> Coordinación con partners locales</li>
+                      <li class="flex gap-2 justify-center sm:justify-start"><span class="text-gold-principal mt-0.5">›</span> Setup tributario y puesta en marcha operativa</li>
+                      <li class="flex gap-2 justify-center sm:justify-start"><span class="text-gold-principal mt-0.5">›</span> Domicilio legal y fiscal para empresas extranjeras</li>
+                      <li class="flex gap-2 justify-center sm:justify-start"><span class="text-gold-principal mt-0.5">›</span> Equipo residente en Brasil como representante legal</li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="bg-navy-principal/[0.03] rounded-lg p-5 mt-6">
+                  <h4 class="text-sm font-medium uppercase tracking-wide text-gold-principal mb-2">¿Para quién es este servicio?</h4>
+                  <p class="text-navy-principal/75 text-sm leading-relaxed">Empresas que quieren operar en LATAM sin lidiar con la complejidad local — ya sea instalándose en Argentina o expandiéndose a Paraguay y Brasil con estructura real desde el primer día.</p>
+                </div>
+              </div>
+            </div>
+          </article>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         QUIÉNES SOMOS — #quienes-somos
+    ====================================================================== -->
+    <section id="quienes-somos" class="py-20 lg:py-28">
+      <div class="max-w-screen-xl mx-auto px-6">
+
+        <!-- Banner institucional (azul) -->
+        <div class="reveal relative overflow-hidden mb-6 rounded-3xl bg-navy-principal border border-white/10 shadow-[0_25px_70px_-30px_rgba(10,31,68,.45)] p-8 sm:p-10 lg:p-14">
+
+          <div class="relative">
+
+        <header class="mb-10">
+          <p class="text-gold-claro font-medium tracking-widest uppercase text-sm">Más que contadores. Tu socio estratégico local.</p>
+          <div class="hairline mt-3"></div>
+        </header>
+
+        <!-- Intro institucional -->
+        <div class="flex flex-col items-center text-center lg:flex-row lg:items-start lg:text-left gap-8 lg:gap-10">
+          <div class="shrink-0 w-28 h-28 rounded-full bg-white/10 border border-white/15 flex items-center justify-center text-white/70">
+            <i class="ti ti-building-skyscraper text-4xl" aria-hidden="true"></i>
+          </div>
+          <div class="max-w-3xl">
+            <p class="text-white/85 leading-relaxed">
+              JLC Global Advisory es una consultora con base en Argentina especializada en acompañar a
+              empresas en su instalación, operación y expansión en LATAM. Trabajamos con empresas
+              argentinas en crecimiento y con compañías extranjeras que necesitan un socio local confiable
+              para operar en la región.
+            </p>
+            <p class="mt-5 text-white/85 leading-relaxed">
+              No solo asesoramos: ejecutamos. Nos ocupamos de la complejidad regulatoria, contable y
+              operativa para que nuestros clientes se enfoquen en hacer crecer su negocio.
+            </p>
+          </div>
+        </div>
+          </div>
+        </div>
+        <!-- /Banner institucional -->
+
+        <!-- Lo que nos diferencia -->
+        <div class="mb-16">
+          <ul class="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            <li class="card-hover hover:border-gold-principal/40 bg-white/45 backdrop-blur-md border border-navy-principal/10 rounded-xl p-6 reveal">
+              <i class="ti ti-checklist text-3xl text-gold-principal" aria-hidden="true"></i>
+              <h4 class="font-serif font-bold text-lg text-navy-principal mt-3">Ejecución real</h4>
+              <p class="mt-2 text-sm text-navy-principal/70 leading-relaxed">No solo damos recomendaciones. Implementamos, operamos y acompañamos cada proceso hasta que funciona.</p>
+            </li>
+            <li class="card-hover hover:border-gold-principal/40 bg-white/45 backdrop-blur-md border border-navy-principal/10 rounded-xl p-6 reveal">
+              <i class="ti ti-map-2 text-3xl text-gold-principal" aria-hidden="true"></i>
+              <h4 class="font-serif font-bold text-lg text-navy-principal mt-3">Especialización regional</h4>
+              <p class="mt-2 text-sm text-navy-principal/70 leading-relaxed">Conocemos la complejidad normativa argentina y la coordinamos con redes de partners en Paraguay y Brasil.</p>
+            </li>
+            <li class="card-hover hover:border-gold-principal/40 bg-white/45 backdrop-blur-md border border-navy-principal/10 rounded-xl p-6 reveal">
+              <i class="ti ti-language text-3xl text-gold-principal" aria-hidden="true"></i>
+              <h4 class="font-serif font-bold text-lg text-navy-principal mt-3">Trilingüismo real</h4>
+              <p class="mt-2 text-sm text-navy-principal/70 leading-relaxed">Atención y reporting en español, inglés y portugués. Nuestros clientes extranjeros operan con la misma fluidez que los locales.</p>
+            </li>
+            <li class="card-hover hover:border-gold-principal/40 bg-white/45 backdrop-blur-md border border-navy-principal/10 rounded-xl p-6 reveal">
+              <i class="ti ti-chart-bar text-3xl text-gold-principal" aria-hidden="true"></i>
+              <h4 class="font-serif font-bold text-lg text-navy-principal mt-3">Decisiones basadas en datos</h4>
+              <p class="mt-2 text-sm text-navy-principal/70 leading-relaxed">Llevamos la información financiera al nivel gerencial: dashboards, KPIs y reportes que sirven para decidir, no solo para cumplir.</p>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Clientes — ¿Para quién trabajamos? (banner acrílico) -->
+        <div class="reveal relative overflow-hidden mb-16 rounded-3xl border border-white/60 shadow-[0_25px_70px_-30px_rgba(10,31,68,.45)] p-8 sm:p-10 lg:p-14">
+
+          <!-- Capa acrílica (vidrio esmerilado) -->
+          <div aria-hidden="true" class="absolute inset-0 bg-white/55 backdrop-blur-2xl"></div>
+
+          <!-- Contenido (por encima del vidrio) -->
+          <div class="relative">
+            <header class="mb-8">
+              <p class="text-gold-principal font-medium tracking-widest uppercase text-sm">Clientes / Clients</p>
+              <div class="hairline mt-3"></div>
+              <h3 class="font-serif font-bold text-2xl sm:text-3xl text-navy-principal mt-4">¿Para quién es este servicio?</h3>
+            </header>
+            <div class="grid gap-8 sm:grid-cols-2">
+              <p class="text-navy-principal/75 leading-relaxed">
+                Trabajamos con empresas en distintas etapas de crecimiento. Desde PyMEs que necesitan
+                ordenar su operación, hasta subsidiarias multinacionales que requieren control financiero
+                riguroso y reporte a casa matriz.
+              </p>
+              <p class="text-navy-principal/75 leading-relaxed">
+                Our international clients, primarily from the US, Europe, and neighboring LATAM countries, rely on JLC Global Advisory as their trusted local partner to navigate Argentina's regulatory
+                complexity and expand regionally.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tipos de cliente (4 cards) -->
+        <div class="grid gap-5 sm:grid-cols-2 mb-16">
+          <article class="card-hover hover:border-gold-principal/40 bg-white/45 backdrop-blur-md border border-navy-principal/10 rounded-xl p-6 reveal">
+            <i class="ti ti-briefcase text-3xl text-gold-principal" aria-hidden="true"></i>
+            <h4 class="font-serif font-bold text-lg text-navy-principal mt-3">PyMEs argentinas en crecimiento</h4>
+            <p class="mt-2 text-sm text-navy-principal/70 leading-relaxed">Empresas locales que quieren ordenar su administración, profesionalizar su gestión financiera y tener información para decidir.</p>
+          </article>
+          <article class="card-hover hover:border-gold-principal/40 bg-white/45 backdrop-blur-md border border-navy-principal/10 rounded-xl p-6 reveal">
+            <i class="ti ti-world text-3xl text-gold-principal" aria-hidden="true"></i>
+            <h4 class="font-serif font-bold text-lg text-navy-principal mt-3">Empresas extranjeras / Foreign companies</h4>
+            <p class="mt-2 text-sm text-navy-principal/70 leading-relaxed">US and European companies looking to set up operations in Argentina or expand into LATAM with a reliable local partner.</p>
+          </article>
+          <article class="card-hover hover:border-gold-principal/40 bg-white/45 backdrop-blur-md border border-navy-principal/10 rounded-xl p-6 reveal">
+            <i class="ti ti-activity text-3xl text-gold-principal" aria-hidden="true"></i>
+            <h4 class="font-serif font-bold text-lg text-navy-principal mt-3">Subsidiarias y filiales</h4>
+            <p class="mt-2 text-sm text-navy-principal/70 leading-relaxed">Empresas multinacionales con operaciones en Argentina que necesitan control financiero, reporting a casa matriz y cumplimiento local.</p>
+          </article>
+          <article class="card-hover hover:border-gold-principal/40 bg-white/45 backdrop-blur-md border border-navy-principal/10 rounded-xl p-6 reveal">
+            <i class="ti ti-stack-2 text-3xl text-gold-principal" aria-hidden="true"></i>
+            <h4 class="font-serif font-bold text-lg text-navy-principal mt-3">Startups y scale-ups</h4>
+            <p class="mt-2 text-sm text-navy-principal/70 leading-relaxed">Empresas en etapa de crecimiento que necesitan infraestructura financiera y operativa sólida sin contratar equipos internos grandes.</p>
+          </article>
+        </div>
+
+        <!-- Banner acrílico (duplicado) -->
+        <div class="reveal relative overflow-hidden mb-16 rounded-3xl border border-white/60 shadow-[0_25px_70px_-30px_rgba(10,31,68,.45)] p-8 sm:p-10 lg:p-14">
+
+          <!-- Capa acrílica (vidrio esmerilado) -->
+          <div aria-hidden="true" class="absolute inset-0 bg-white/55 backdrop-blur-2xl"></div>
+
+          <!-- Contenido (por encima del vidrio) -->
+          <div class="relative">
+
+        <!-- Perfil del fundador -->
+        <div class="flex flex-col items-center text-center lg:flex-row lg:items-start lg:text-left gap-8 lg:gap-10">
+          <figure class="shrink-0 w-full sm:w-60">
+            <div class="relative overflow-hidden rounded-2xl border border-navy-principal/10 shadow-md">
+              <img src="assets/img/jlc-profile.webp" alt="José Luis Cuevas"
+                   class="w-full h-72 sm:h-80 object-cover object-top scale-110 translate-x-3" />
+              <!-- Flare/sombra azul (navy) en la zona inferior -->
+              <div class="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-navy-principal/70 via-navy-principal/25 to-transparent" aria-hidden="true"></div>
+            </div>
+            <figcaption class="mt-3 text-center text-base font-semibold text-navy-principal">Founder · JLC Global Advisory</figcaption>
+          </figure>
+          <div class="max-w-3xl">
+            <h2 class="font-serif font-bold text-2xl sm:text-3xl text-navy-principal">José Luis Cuevas</h2>
+            <p class="mt-2 text-navy-secundario font-medium">
+              Contador Público | Magíster en Dirección de Finanzas | Especialista en Tributación Internacional
+            </p>
+            <p class="mt-5 text-navy-principal/75 leading-relaxed">
+              Más de 10 años liderando áreas de finanzas, contabilidad, impuestos y comercio exterior en
+              compañías de los sectores industrial, servicios, comercio exterior, logístico y petrolero.
+              Hace un año dejé la relación de dependencia para construir algo distinto. No quería ser un
+              contador más, quería ser el socio que las empresas necesitan cuando el problema es más
+              profundo de lo que parece a primera vista. Esa decisión nació de una convicción simple: la
+              expertise técnica vale poco si no va acompañada de ejecución real. En JLC Global Advisory la
+              consultoría no termina con el informe, acompañamos cada etapa hasta que el resultado es real
+              y medible. Lo que me distingue no es solo el título. Es haber estado del otro lado. Trabajé
+              años dentro de empresas enfrentando los mismos problemas que hoy ayudo a resolver. Eso me
+              permite entrar a cada cliente no como un consultor externo que opina, sino como alguien que
+              ya navegó esas aguas y sabe exactamente qué hacer.
+            </p>
+          </div>
+
+          <!-- Contador: +10 años de experiencia (anima de 0 a 10 al entrar en pantalla) -->
+          <div class="shrink-0 lg:ml-auto lg:self-center flex flex-col items-center gap-1">
+            <i class="ti ti-trending-up text-gold-principal text-4xl" aria-hidden="true"></i>
+            <div class="font-serif font-bold text-navy-principal leading-none text-6xl lg:text-7xl">
+              <span data-counter data-target="10">0</span><span class="text-gold-principal">+</span>
+            </div>
+            <p class="mt-1 text-xs uppercase tracking-widest text-navy-principal/60">años de experiencia</p>
+          </div>
+        </div>
+          </div>
+        </div>
+        <!-- /Banner acrílico (duplicado) -->
+
+        <!-- Especialización (2 columnas) -->
+        <div class="grid gap-6 sm:grid-cols-2 mb-16">
+          <article class="card-hover hover:border-gold-principal/40 bg-white border border-navy-principal/10 rounded-xl p-7 reveal">
+            <div class="flex items-center gap-3 mb-4">
+              <i class="ti ti-chart-line text-2xl text-gold-principal" aria-hidden="true"></i>
+              <h3 class="font-serif font-bold text-xl text-navy-principal">Finanzas y Contabilidad</h3>
+            </div>
+            <ul class="space-y-2 text-navy-principal/75">
+              <li class="flex gap-2"><span class="text-gold-principal mt-1">›</span> FP&amp;A y control de gestión (planificación, forecasting, dashboards ejecutivos)</li>
+              <li class="flex gap-2"><span class="text-gold-principal mt-1">›</span> Reestructuración financiera y saneamiento en situaciones complejas</li>
+              <li class="flex gap-2"><span class="text-gold-principal mt-1">›</span> Análisis financiero avanzado con Power BI y SQL</li>
+              <li class="flex gap-2"><span class="text-gold-principal mt-1">›</span> Contabilidad NIIF (reportes bajo normas internacionales para grupos multinacionales)</li>
+            </ul>
+          </article>
+          <article class="card-hover hover:border-gold-principal/40 bg-white border border-navy-principal/10 rounded-xl p-7 reveal">
+            <div class="flex items-center gap-3 mb-4">
+              <i class="ti ti-world text-2xl text-gold-principal" aria-hidden="true"></i>
+              <h3 class="font-serif font-bold text-xl text-navy-principal">Expansión &amp; Internacional</h3>
+            </div>
+            <ul class="space-y-2 text-navy-principal/75">
+              <li class="flex gap-2"><span class="text-gold-principal mt-1">›</span> Expansión empresarial en Argentina, Paraguay y Brasil</li>
+              <li class="flex gap-2"><span class="text-gold-principal mt-1">›</span> Tributación internacional (estructuras multijurisdiccionales y planificación fiscal)</li>
+              <li class="flex gap-2"><span class="text-gold-principal mt-1">›</span> Estructuras societarias en múltiples jurisdicciones simultáneas</li>
+              <li class="flex gap-2"><span class="text-gold-principal mt-1">›</span> Atención trilingüe (español, inglés y portugués)</li>
+            </ul>
+          </article>
+        </div>
+
+        <!-- Misión / Visión -->
+        <div class="grid gap-6 mb-16">
+          <article class="card-hover bg-navy-principal text-white rounded-xl px-8 py-12 lg:px-10 lg:py-16 reveal">
+            <h3 class="font-serif font-bold text-2xl text-gold-claro mb-3">Misión</h3>
+            <p class="text-white/85 leading-relaxed">
+              Acompañar a empresas argentinas e internacionales en su operación, crecimiento y expansión
+              en LATAM, con rigor técnico, ejecución concreta y presencia local real. No solo asesoramos:
+              nos involucramos en cada proceso hasta que el resultado es tangible.
+            </p>
+          </article>
+          <article class="card-hover bg-navy-secundario text-white rounded-xl px-8 py-12 lg:px-10 lg:py-16 reveal">
+            <h3 class="font-serif font-bold text-2xl text-gold-claro mb-3">Visión</h3>
+            <p class="text-white/85 leading-relaxed">
+              Ser la consultora de referencia en Argentina y LATAM para empresas que buscan operar sin
+              fricciones, tomar decisiones con información real y expandirse en la región con estructura
+              sólida, con presencia propia en Argentina, Paraguay y Brasil.
+            </p>
+          </article>
+        </div>
+
+        <!-- Valores (6) -->
+        <div>
+          <h3 class="font-serif font-bold text-2xl text-navy-principal mb-6">Nuestros valores</h3>
+          <ul class="grid gap-5 grid-cols-2 lg:grid-cols-3">
+            <li class="card-hover hover:border-gold-principal/40 bg-white/45 backdrop-blur-md border border-navy-principal/10 rounded-xl p-6 reveal">
+              <i class="ti ti-eye text-3xl text-gold-principal" aria-hidden="true"></i>
+              <h4 class="font-serif font-bold text-lg text-navy-principal mt-3">Transparencia</h4>
+              <p class="mt-2 text-sm text-navy-principal/70 leading-relaxed">Decimos la verdad aunque no sea lo que el cliente quiere escuchar. La información honesta es la base de cualquier decisión correcta.</p>
+            </li>
+            <li class="card-hover hover:border-gold-principal/40 bg-white/45 backdrop-blur-md border border-navy-principal/10 rounded-xl p-6 reveal">
+              <i class="ti ti-rocket text-3xl text-gold-principal" aria-hidden="true"></i>
+              <h4 class="font-serif font-bold text-lg text-navy-principal mt-3">Ejecución</h4>
+              <p class="mt-2 text-sm text-navy-principal/70 leading-relaxed">No nos quedamos en el diagnóstico. Nos involucramos, implementamos y acompañamos hasta que el resultado es real y verificable.</p>
+            </li>
+            <li class="card-hover hover:border-gold-principal/40 bg-white/45 backdrop-blur-md border border-navy-principal/10 rounded-xl p-6 reveal">
+              <i class="ti ti-award text-3xl text-gold-principal" aria-hidden="true"></i>
+              <h4 class="font-serif font-bold text-lg text-navy-principal mt-3">Excelencia técnica</h4>
+              <p class="mt-2 text-sm text-navy-principal/70 leading-relaxed">El nivel de una firma internacional con el conocimiento y la cercanía de quien opera en la región hace años.</p>
+            </li>
+            <li class="card-hover hover:border-gold-principal/40 bg-white/45 backdrop-blur-md border border-navy-principal/10 rounded-xl p-6 reveal">
+              <i class="ti ti-shield-check text-3xl text-gold-principal" aria-hidden="true"></i>
+              <h4 class="font-serif font-bold text-lg text-navy-principal mt-3">Compromiso</h4>
+              <p class="mt-2 text-sm text-navy-principal/70 leading-relaxed">Cada cliente es un socio. Su problema es nuestro problema hasta que está resuelto.</p>
+            </li>
+            <li class="card-hover hover:border-gold-principal/40 bg-white/45 backdrop-blur-md border border-navy-principal/10 rounded-xl p-6 reveal">
+              <i class="ti ti-bulb text-3xl text-gold-principal" aria-hidden="true"></i>
+              <h4 class="font-serif font-bold text-lg text-navy-principal mt-3">Innovación</h4>
+              <p class="mt-2 text-sm text-navy-principal/70 leading-relaxed">Usamos tecnología, datos y análisis avanzado para generar insights que van más allá del cumplimiento contable.</p>
+            </li>
+            <li class="card-hover hover:border-gold-principal/40 bg-white/45 backdrop-blur-md border border-navy-principal/10 rounded-xl p-6 reveal">
+              <i class="ti ti-heart-handshake text-3xl text-gold-principal" aria-hidden="true"></i>
+              <h4 class="font-serif font-bold text-lg text-navy-principal mt-3">Cercanía</h4>
+              <p class="mt-2 text-sm text-navy-principal/70 leading-relaxed">Te tratamos como socio, no como expediente. Atención directa en español e inglés.</p>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         CASOS DE ÉXITO — #casos
+    ====================================================================== -->
+    <section id="casos" class="py-20 lg:py-28">
+      <div class="max-w-screen-xl mx-auto px-6">
+
+        <header class="mb-12 reveal">
+          <p class="text-gold-principal font-medium tracking-widest uppercase text-sm">Casos de Éxito</p>
+          <div class="hairline mt-3"></div>
+        </header>
+
+        <div class="grid gap-7 lg:grid-cols-3 lg:gap-y-0 lg:[grid-template-rows:auto_auto_auto_auto]">
+          <!-- Caso 01 -->
+          <article class="card-hover hover:border-gold-principal/40 flex flex-col bg-white/45 backdrop-blur-md border border-navy-principal/10 rounded-xl overflow-hidden lg:grid lg:row-span-4 lg:[grid-template-rows:subgrid] reveal">
+            <div class="relative bg-navy-principal px-7 py-5 pr-14">
+              <button type="button" class="js-caso-zoom absolute top-4 right-4 w-9 h-9 rounded-full border border-gold-claro/40 text-gold-claro hover:bg-white/10 flex items-center justify-center transition-colors" aria-label="Ampliar este caso">
+                <i class="ti ti-zoom-in text-lg" aria-hidden="true"></i>
+              </button>
+              <p class="text-gold-claro font-serif font-bold text-lg">Caso 01</p>
+              <p class="text-white/80 text-sm mt-0.5">Empresa de Seguridad Privada · Buenos Aires, Argentina</p>
+            </div>
+            <div class="px-7 pt-6">
+              <h3 class="text-xs font-medium uppercase tracking-wide text-navy-principal/50 mb-1.5">Situación inicial</h3>
+              <p class="text-sm text-navy-principal/75 leading-relaxed">La contadora anterior había dejado de presentar todo. Deudas en ARCA y ARBA, sueldos impagos, embargos millonarios activos, alta pendiente en el sindicato y facturación irregular. Las socias no sabían qué tan profundo era el problema ni si podrían operar la semana siguiente.</p>
+            </div>
+            <div class="px-7 pt-5">
+              <h3 class="text-xs font-medium uppercase tracking-wide text-navy-principal/50 mb-1.5">Lo que hicimos</h3>
+              <p class="text-sm text-navy-principal/75 leading-relaxed">Regularizamos toda la situación impositiva en ARCA y ARBA · Presentamos todos los periodos pendientes · Obtuvimos beneficios fiscales · Bajamos la carga impositiva estructural · Resolvimos la deuda de sueldos y la situación sindical · Plan de saneamiento financiero completo · Conseguimos financiamiento bancario · Regularizamos la situación personal de las socias.</p>
+            </div>
+            <div class="px-7 pb-7">
+              <div class="mt-5 pt-4 border-t border-gold-principal/30">
+                <h3 class="text-xs font-medium uppercase tracking-wide text-gold-principal mb-1.5">Resultado</h3>
+                <p class="text-sm font-medium text-navy-principal leading-relaxed">De embargos millonarios y riesgo de cierre a 3 años de crecimiento sostenido. Hoy analizan nuevas áreas de negocio.</p>
+              </div>
+            </div>
+          </article>
+
+          <!-- Caso 02 -->
+          <article class="card-hover hover:border-gold-principal/40 flex flex-col bg-white/45 backdrop-blur-md border border-navy-principal/10 rounded-xl overflow-hidden lg:grid lg:row-span-4 lg:[grid-template-rows:subgrid] reveal">
+            <div class="relative bg-navy-principal px-7 py-5 pr-14">
+              <button type="button" class="js-caso-zoom absolute top-4 right-4 w-9 h-9 rounded-full border border-gold-claro/40 text-gold-claro hover:bg-white/10 flex items-center justify-center transition-colors" aria-label="Ampliar este caso">
+                <i class="ti ti-zoom-in text-lg" aria-hidden="true"></i>
+              </button>
+              <p class="text-gold-claro font-serif font-bold text-lg">Caso 02</p>
+              <p class="text-white/80 text-sm mt-0.5">Franquicia Gastronómica · Argentina</p>
+            </div>
+            <div class="px-7 pt-6">
+              <h3 class="text-xs font-medium uppercase tracking-wide text-navy-principal/50 mb-1.5">Situación inicial</h3>
+              <p class="text-sm text-navy-principal/75 leading-relaxed">Un franquiciado de una cadena conocida creía que ganaba — la franquicia le mandaba planillas siempre en verde. Su contador era el de la franquiciante y solo declaraba impuestos. Llevaba meses perdiendo dinero y acumulando deuda personal sin saberlo.</p>
+            </div>
+            <div class="px-7 pt-5">
+              <h3 class="text-xs font-medium uppercase tracking-wide text-navy-principal/50 mb-1.5">Lo que hicimos</h3>
+              <p class="text-sm text-navy-principal/75 leading-relaxed">Regularizamos la deuda impositiva y solicitamos beneficios fiscales · Construimos la rentabilidad real, local por local · Identificamos la pérdida que las planillas ocultaban · Armamos información propia, independiente y verificable · Preparamos al cliente para negociar con la franquiciante con números propios.</p>
+            </div>
+            <div class="px-7 pb-7">
+              <div class="mt-5 pt-4 border-t border-gold-principal/30">
+                <h3 class="text-xs font-medium uppercase tracking-wide text-gold-principal mb-1.5">Resultado</h3>
+                <p class="text-sm font-medium text-navy-principal leading-relaxed">La franquiciante tuvo que reconocer la situación y ajustar las condiciones. Por primera vez el cliente negoció desde la verdad.</p>
+              </div>
+            </div>
+          </article>
+
+          <!-- Caso 03 -->
+          <article class="card-hover hover:border-gold-principal/40 flex flex-col bg-white/45 backdrop-blur-md border border-navy-principal/10 rounded-xl overflow-hidden lg:grid lg:row-span-4 lg:[grid-template-rows:subgrid] reveal">
+            <div class="relative bg-navy-principal px-7 py-5 pr-14">
+              <button type="button" class="js-caso-zoom absolute top-4 right-4 w-9 h-9 rounded-full border border-gold-claro/40 text-gold-claro hover:bg-white/10 flex items-center justify-center transition-colors" aria-label="Ampliar este caso">
+                <i class="ti ti-zoom-in text-lg" aria-hidden="true"></i>
+              </button>
+              <p class="text-gold-claro font-serif font-bold text-lg">Caso 03</p>
+              <p class="text-white/80 text-sm mt-0.5">Multinacional Química · Argentina / Brasil / Uruguay</p>
+            </div>
+            <div class="px-7 pt-6">
+              <h3 class="text-xs font-medium uppercase tracking-wide text-navy-principal/50 mb-1.5">Situación inicial</h3>
+              <p class="text-sm text-navy-principal/75 leading-relaxed">Empresa química con presencia en varios países quería instalarse en Brasil con estructura compleja: operativa en San Pablo, ventas desde Argentina, producto importado de un tercer país, controlante en Uruguay. Cuatro jurisdicciones a la vez, sin equipo local en Brasil y con la barrera del idioma.</p>
+            </div>
+            <div class="px-7 pt-5">
+              <h3 class="text-xs font-medium uppercase tracking-wide text-navy-principal/50 mb-1.5">Lo que hicimos</h3>
+              <p class="text-sm text-navy-principal/75 leading-relaxed">Armamos la estructura societaria en Brasil sin que los accionistas viajaran · Tradujimos la documentación al portugués · Coordinamos con partner estratégico en Brasil · Activamos la cuenta bancaria y dimos forma jurídica a las importaciones · Incorporamos agentes de comercio · Aportamos representante legal residente en Brasil · Pusimos en marcha la operación coordinando las cuatro jurisdicciones.</p>
+            </div>
+            <div class="px-7 pb-7">
+              <div class="mt-5 pt-4 border-t border-gold-principal/30">
+                <h3 class="text-xs font-medium uppercase tracking-wide text-gold-principal mb-1.5">Resultado</h3>
+                <p class="text-sm font-medium text-navy-principal leading-relaxed">Completó su primera etapa de expansión regional sin viajes, sin barreras idiomáticas y con estructura legal, fiscal y bancaria activa desde el día uno.</p>
+              </div>
+            </div>
+          </article>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         CONTACTO — #contacto · CTA final
+    ====================================================================== -->
+    <section id="contacto" class="py-20 lg:py-28">
+      <div class="max-w-screen-xl mx-auto px-6">
+
+        <!-- Card azul tipo banner: degradado navy + motivo de red (+ imagen opcional) -->
+        <div class="reveal relative overflow-hidden rounded-3xl bg-navy-principal/80 backdrop-blur-xl shadow-[0_30px_80px_-30px_rgba(10,31,68,.55)]">
+
+          <!-- Imagen de fondo opcional (mapa / red). TODO: assets/img/contacto-bg.jpg -->
+          <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('assets/img/contacto-bg.jpg');" aria-hidden="true"></div>
+
+          <!-- Overlay degradado navy: mantiene el texto legible a la izquierda -->
+          <div class="absolute inset-0 bg-gradient-to-r from-navy-principal/80 via-navy-principal/55 to-navy-principal/20" aria-hidden="true"></div>
+
+          <!-- Constelación de nodos animada — cubre todo el card (líneas finas, puntos pequeños) -->
+          <svg viewBox="0 0 600 360" preserveAspectRatio="xMidYMid slice" aria-hidden="true"
+               class="net-drift pointer-events-none absolute inset-0 h-full w-full">
+            <g class="text-white/10" stroke="currentColor" stroke-width="1" fill="none">
+              <line x1="45" y1="70" x2="130" y2="45" />
+              <line x1="130" y1="45" x2="215" y2="85" />
+              <line x1="215" y1="85" x2="300" y2="50" />
+              <line x1="300" y1="50" x2="385" y2="95" />
+              <line x1="385" y1="95" x2="470" y2="55" />
+              <line x1="470" y1="55" x2="555" y2="105" />
+              <line x1="555" y1="105" x2="560" y2="210" />
+              <line x1="560" y1="210" x2="485" y2="265" />
+              <line x1="485" y1="265" x2="395" y2="205" />
+              <line x1="395" y1="205" x2="310" y2="270" />
+              <line x1="310" y1="270" x2="220" y2="215" />
+              <line x1="220" y1="215" x2="130" y2="260" />
+              <line x1="130" y1="260" x2="55" y2="185" />
+              <line x1="55" y1="185" x2="45" y2="70" />
+              <line x1="175" y1="140" x2="130" y2="45" />
+              <line x1="175" y1="140" x2="55" y2="185" />
+              <line x1="175" y1="140" x2="255" y2="150" />
+              <line x1="255" y1="150" x2="215" y2="85" />
+              <line x1="255" y1="150" x2="330" y2="150" />
+              <line x1="330" y1="150" x2="300" y2="50" />
+              <line x1="330" y1="150" x2="395" y2="205" />
+              <line x1="330" y1="150" x2="455" y2="165" />
+              <line x1="455" y1="165" x2="470" y2="55" />
+              <line x1="455" y1="165" x2="560" y2="210" />
+              <line x1="255" y1="150" x2="220" y2="215" />
+            </g>
+            <!-- Pulsos de luz que viajan por algunas conexiones (datos circulando) -->
+            <g class="text-white/45" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" fill="none">
+              <line x1="45" y1="70" x2="130" y2="45" class="net-flow" style="animation-delay: 0s; animation-duration: 3.5s" />
+              <line x1="300" y1="50" x2="385" y2="95" class="net-flow" style="animation-delay: 1.2s; animation-duration: 4s" />
+              <line x1="330" y1="150" x2="455" y2="165" class="net-flow" style="animation-delay: 0.6s; animation-duration: 3s" />
+              <line x1="255" y1="150" x2="330" y2="150" class="net-flow" style="animation-delay: 2s; animation-duration: 3.2s" />
+              <line x1="395" y1="205" x2="485" y2="265" class="net-flow" style="animation-delay: 1.6s; animation-duration: 4.2s" />
+              <line x1="175" y1="140" x2="255" y2="150" class="net-flow" style="animation-delay: 2.6s; animation-duration: 3.6s" />
+              <line x1="560" y1="210" x2="455" y2="165" class="net-flow" style="animation-delay: 0.3s; animation-duration: 3.8s" />
+            </g>
+            <g fill="currentColor">
+              <!-- estáticos tenues -->
+              <circle cx="130" cy="45" r="3.5" class="text-white/15" />
+              <circle cx="470" cy="55" r="3.5" class="text-white/15" />
+              <circle cx="560" cy="210" r="3.5" class="text-white/15" />
+              <circle cx="395" cy="205" r="3.5" class="text-white/15" />
+              <circle cx="220" cy="215" r="3.5" class="text-white/15" />
+              <circle cx="55" cy="185" r="3.5" class="text-white/15" />
+              <!-- titilan -->
+              <circle cx="45" cy="70" r="3.5" class="text-white net-pulse" style="animation-delay: 0s; animation-duration: 5s" />
+              <circle cx="385" cy="95" r="3.5" class="text-white net-pulse" style="animation-delay: 2s; animation-duration: 5.5s" />
+              <circle cx="485" cy="265" r="3.5" class="text-white net-pulse" style="animation-delay: 1.8s; animation-duration: 6.5s" />
+              <circle cx="130" cy="260" r="3.5" class="text-white net-pulse" style="animation-delay: 3.4s; animation-duration: 5s" />
+              <circle cx="455" cy="165" r="3.5" class="text-white net-glow" style="animation-delay: 4s; animation-duration: 5s" />
+              <!-- aparecen y desaparecen -->
+              <circle cx="215" cy="85" r="3" class="text-white net-blink" style="animation-delay: 0.5s; animation-duration: 8s" />
+              <circle cx="555" cy="105" r="3" class="text-white net-blink" style="animation-delay: 3s; animation-duration: 7s" />
+              <circle cx="310" cy="270" r="3" class="text-white net-blink" style="animation-delay: 2.4s; animation-duration: 7.5s" />
+              <circle cx="175" cy="140" r="3" class="text-white net-blink" style="animation-delay: 1s; animation-duration: 8.5s" />
+              <circle cx="255" cy="150" r="3" class="text-white net-blink" style="animation-delay: 0.2s; animation-duration: 7s" />
+              <!-- dorados (acento de marca) -->
+              <circle cx="300" cy="50" r="4" class="text-gold-claro net-pulse" style="animation-delay: 1.2s; animation-duration: 6s" />
+              <circle cx="330" cy="150" r="5" class="text-gold-principal net-glow" style="animation-delay: 0s; animation-duration: 4.5s" />
+            </g>
+          </svg>
+
+          <!-- Contenido -->
+          <div class="relative px-8 sm:px-12 lg:px-16 py-14 lg:py-20">
+        <div class="max-w-2xl">
+          <p class="text-gold-claro font-medium tracking-widest uppercase text-sm">Contacto</p>
+          <div class="hairline mt-3"></div>
+          <h2 class="font-serif font-bold text-3xl sm:text-4xl text-white mt-4">Agendemos una reunión.</h2>
+          <p class="mt-4 text-white/80 leading-relaxed">
+            Contanos sobre tu empresa, y te respondemos en menos de 24hs. La primera consulta es sin costo.
+          </p>
+        </div>
+
+        <div class="mt-10 flex flex-col sm:flex-row gap-4 sm:items-stretch">
+          <!-- WhatsApp -->
+          <a data-whatsapp href="#" class="flex items-center gap-3 bg-white/[0.06] hover:bg-white/[0.1] border border-white/15 rounded-lg px-6 py-4 text-white transition-colors">
+            <i class="ti ti-brand-whatsapp text-2xl text-gold-claro" aria-hidden="true"></i>
+            <span>
+              <span class="block text-xs text-white/60">WhatsApp</span>
+              <span class="block font-medium">Escribinos directo</span>
+            </span>
+          </a>
+          <!-- Email -->
+          <a href="mailto:joseluiscuevas@jlcglobaladvisory.com" class="flex items-center gap-3 bg-white/[0.06] hover:bg-white/[0.1] border border-white/15 rounded-lg px-6 py-4 text-white transition-colors">
+            <i class="ti ti-mail text-2xl text-gold-claro" aria-hidden="true"></i>
+            <span>
+              <span class="block text-xs text-white/60">Email</span>
+              <span class="block font-medium break-all">joseluiscuevas@jlcglobaladvisory.com</span>
+            </span>
+          </a>
+          <!-- CTA -->
+          <a href="#contacto" data-cta-form class="flex items-center justify-center gap-2 bg-gold-principal hover:bg-gold-claro text-navy-principal font-medium px-7 py-4 rounded-lg transition-colors sm:ml-auto">
+            Agendar reunión
+            <i class="ti ti-arrow-right" aria-hidden="true"></i>
+          </a>
+        </div>
+          </div>
+          <!-- /Contenido -->
+        </div>
+        <!-- /Card azul -->
+      </div>
+    </section>
+  </main>
+
+  <!-- =====================================================================
+       FOOTER — navy full-bleed
+  ====================================================================== -->
+  <footer class="bg-gradient-to-b from-navy-principal to-[#02060e] border-t border-white/10 py-14">
+    <div class="max-w-screen-xl mx-auto px-6">
+      <div class="reveal flex flex-col md:flex-row md:items-start md:justify-between gap-10">
+
+        <!-- Marca -->
+        <div class="max-w-sm">
+          <div class="flex items-center gap-3">
+            <img src="assets/img/logo.png" alt="" class="h-14 w-auto shrink-0" />
+
+            <span class="flex flex-col leading-tight">
+              <span class="font-serif font-bold text-white text-lg tracking-wide">JLC GLOBAL ADVISORY</span>
+              <span class="text-white/55 text-[9px] tracking-[0.06em]">BUSINESS CONSULTING &amp; LATAM EXPANSION</span>
+              <span class="mt-1 h-px w-full bg-gold-principal" aria-hidden="true"></span>
+            </span>
+          </div>
+          <p class="mt-4 text-white/60 text-sm">Argentina · Paraguay · Brasil</p>
+          <div class="flex items-center gap-4 mt-5">
+            <a href="https://www.linkedin.com/company/jlc-global-advisory/" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-white/70 hover:text-gold-claro transition-colors text-sm" aria-label="LinkedIn (se abre en una pestaña nueva)">
+              <i class="ti ti-brand-linkedin text-xl" aria-hidden="true"></i>
+              LinkedIn
+            </a>
+            <a href="https://www.instagram.com/jlcglobaladvisory" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-white/70 hover:text-gold-claro transition-colors text-sm" aria-label="Instagram (se abre en una pestaña nueva)">
+              <i class="ti ti-brand-instagram text-xl" aria-hidden="true"></i>
+              Instagram
+            </a>
+          </div>
+        </div>
+
+        <!-- Contacto -->
+        <div class="text-sm">
+          <h3 class="font-serif font-bold text-white text-base mb-4">Contacto</h3>
+          <ul class="space-y-3 text-white/70">
+            <li>
+              <a href="tel:+5491131284077" class="flex items-start gap-3 hover:text-gold-claro transition-colors">
+                <i class="ti ti-phone text-gold-claro text-lg mt-0.5 shrink-0" aria-hidden="true"></i>
+                <span>+54 9 11 3128-4077</span>
+              </a>
+            </li>
+            <li>
+              <a href="mailto:joseluiscuevas@jlcglobaladvisory.com" class="flex items-start gap-3 hover:text-gold-claro transition-colors">
+                <i class="ti ti-mail text-gold-claro text-lg mt-0.5 shrink-0" aria-hidden="true"></i>
+                <span class="break-all">joseluiscuevas@jlcglobaladvisory.com</span>
+              </a>
+            </li>
+            <li class="flex items-start gap-3">
+              <i class="ti ti-map-pin text-gold-claro text-lg mt-0.5 shrink-0" aria-hidden="true"></i>
+              <span>Av. del Libertador 1234, Piso 8<br />Buenos Aires, Argentina</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Mapa -->
+        <div class="w-full md:w-[420px]">
+          <!-- TODO: reemplazar por coordenadas/dirección exactas cuando estén definidas -->
+          <iframe
+            title="Ubicación — Buenos Aires, Argentina"
+            src="https://www.google.com/maps?q=Buenos+Aires,+Argentina&output=embed"
+            class="w-full h-56 rounded-lg border border-white/10"
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+      </div>
+
+      <div class="mt-12 pt-6 border-t border-white/10 text-center text-white/40 text-xs">
+        © <span id="year">2026</span> JLC Global Advisory. Todos los derechos reservados.
+        <span class="mx-2 text-white/20">·</span> Designed by JeyX Digital
+      </div>
+    </div>
+  </footer>
+
+  <!-- Modal / lightbox de Casos de Éxito -->
+  <div id="caso-modal" class="fixed inset-0 z-[70] hidden items-center justify-center p-4 sm:p-8" role="dialog" aria-modal="true" aria-label="Detalle del caso">
+    <div class="js-modal-backdrop absolute inset-0 bg-navy-principal/80 backdrop-blur-sm"></div>
+    <div class="js-modal-panel relative w-full max-w-lg max-h-[92vh] overflow-y-auto rounded-xl shadow-2xl bg-white">
+      <button type="button" class="js-modal-close absolute top-3 right-3 z-10 w-10 h-10 rounded-full bg-navy-principal text-white hover:bg-navy-secundario flex items-center justify-center transition-colors" aria-label="Cerrar">
+        <i class="ti ti-x text-xl" aria-hidden="true"></i>
+      </button>
+      <div id="caso-modal-content"></div>
+    </div>
+  </div>
+
+  <!-- Selector de idioma flotante (círculo plegable; se expande al hover/tocar) -->
+  <div class="fixed bottom-4 right-4 z-[80] group" data-i18n-skip>
+    <div class="flex items-center rounded-full bg-navy-principal/90 backdrop-blur border border-white/15 shadow-lg text-white overflow-hidden transition-all duration-300">
+      <div class="flex items-center gap-0.5 whitespace-nowrap max-w-0 opacity-0 group-hover:max-w-[170px] group-hover:opacity-100 group-focus-within:max-w-[170px] group-focus-within:opacity-100 transition-all duration-300">
+        <button type="button" data-lang-btn="es" class="ml-2 px-2 py-0.5 text-sm rounded-full transition-colors hover:text-gold-claro aria-[current=true]:bg-gold-principal aria-[current=true]:text-navy-principal aria-[current=true]:font-semibold">ES</button>
+        <button type="button" data-lang-btn="en" class="px-2 py-0.5 text-sm rounded-full transition-colors hover:text-gold-claro aria-[current=true]:bg-gold-principal aria-[current=true]:text-navy-principal aria-[current=true]:font-semibold">EN</button>
+        <button type="button" data-lang-btn="pt" class="px-2 py-0.5 text-sm rounded-full transition-colors hover:text-gold-claro aria-[current=true]:bg-gold-principal aria-[current=true]:text-navy-principal aria-[current=true]:font-semibold">PT</button>
+      </div>
+      <button type="button" class="w-12 h-12 shrink-0 inline-flex items-center justify-center" aria-label="Cambiar idioma / Change language">
+        <i class="ti ti-language text-xl" aria-hidden="true"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- i18n: diccionario (JLC) + motor compartido -->
+  <script src="assets/js/i18n-jlc.js"></script>
+  <script src="assets/js/i18n.js"></script>
+  <script src="assets/js/main.js"></script>
+</body>
+</html>
