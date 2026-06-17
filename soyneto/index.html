@@ -11,6 +11,11 @@
 
   <link rel="icon" type="image/png" href="assets/img/favicon.png" />
 
+  <!-- Tipografía: Arimo (métricamente compatible con Helvetica/Arial) — consistente en todos los dispositivos -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Arimo:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
   <!-- Iconos (placeholders coherentes hasta tener la iconografía final) -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.31.0/dist/tabler-icons.min.css" />
 
@@ -28,7 +33,7 @@
             'plan-azul':    '#0C447C',
           },
           fontFamily: {
-            sans: ['"Helvetica Neue"', 'Arial', 'sans-serif'],
+            sans: ['Arimo', '"Helvetica Neue"', 'Arial', 'sans-serif'],
           },
         },
       },
@@ -37,7 +42,7 @@
 
   <style>
     html { scroll-behavior: smooth; }
-    body { font-family: "Helvetica Neue", Arial, sans-serif; font-weight: 300; }
+    body { font-family: 'Arimo', "Helvetica Neue", Arial, sans-serif; font-weight: 400; }
     h1, h2, h3, .font-bold, strong { font-weight: 700; }
 
     /* Offset para anclas bajo la navbar fija */
