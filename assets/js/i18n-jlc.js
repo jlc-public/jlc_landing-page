@@ -20,8 +20,8 @@ window.I18N = {
     'Operar en LATAM,': 'Operate in LATAM,',
     'sin': 'without',
     'fricción.': 'friction.',
-    'Ayudamos a empresas a instalarse, operar y crecer en Argentina y LATAM sin lidiar con la complejidad local. Nos ocupamos de estructura, impuestos, FP&A y operacion para que el cliente se enfoque en crecer.':
-      'We help companies set up, operate and grow in Argentina and LATAM without dealing with local complexity. We handle structure, taxes, FP&A and operations so the client can focus on growing.',
+    'Ayudamos a empresas a instalarse, operar y crecer en Argentina y LATAM sin lidiar con la complejidad local. Nos ocupamos de estructura societaria, impuestos, FP&A y operacion para que el cliente se enfoque en crecer.':
+      'We help companies set up, operate and grow in Argentina and LATAM without dealing with local complexity. We handle corporate structure, taxes, FP&A and operations so the client can focus on growing.',
     'Agendar reunión': 'Book a meeting',
 
     // Servicios
@@ -54,8 +54,8 @@ window.I18N = {
       'Companies that make important decisions but lack real financial information to back them up — and don’t want the cost of a full-time in-house CFO.',
     'Expansión & Market Entry LATAM': 'Expansion & Market Entry LATAM',
     'Regional Expansion & Market Entry': 'Regional Expansion & Market Entry',
-    'Acompañamos a empresas extranjeras que quieren instalarse en Argentina y a empresas argentinas que quieren expandirse a Paraguay o Brasil — con estructura legal, fiscal y operativa real desde el primer día.':
-      'We support foreign companies that want to set up in Argentina and Argentine companies that want to expand to Paraguay or Brazil — with real legal, tax and operational structure from day one.',
+    'Acompañamos a empresas extranjeras que quieren instalarse en Argentina y a empresas locales o internacionales que quieren expandirse a Paraguay o Brasil — con estructura legal, fiscal y operativa real desde el primer día.':
+      'We support foreign companies that want to set up in Argentina and local or international companies that want to expand to Paraguay or Brazil — with real legal, tax and operational structure from day one.',
     'Entrada a Argentina': 'Entry into Argentina',
     'Constitución de sociedad (SAS / SA / SRL)': 'Company incorporation (SAS / SA / SRL)',
     'Domicilio legal y fiscal para empresas extranjeras': 'Legal and tax domicile for foreign companies',
@@ -193,8 +193,8 @@ window.I18N = {
     'Operar en LATAM,': 'Operar na LATAM,',
     'sin': 'sem',
     'fricción.': 'fricção.',
-    'Ayudamos a empresas a instalarse, operar y crecer en Argentina y LATAM sin lidiar con la complejidad local. Nos ocupamos de estructura, impuestos, FP&A y operacion para que el cliente se enfoque en crecer.':
-      'Ajudamos empresas a se instalar, operar e crescer na Argentina e na LATAM sem lidar com a complexidade local. Cuidamos de estrutura, impostos, FP&A e operação para que o cliente foque em crescer.',
+    'Ayudamos a empresas a instalarse, operar y crecer en Argentina y LATAM sin lidiar con la complejidad local. Nos ocupamos de estructura societaria, impuestos, FP&A y operacion para que el cliente se enfoque en crecer.':
+      'Ajudamos empresas a se instalar, operar e crescer na Argentina e na LATAM sem lidar com a complexidade local. Cuidamos de estrutura societária, impostos, FP&A e operação para que o cliente foque em crescer.',
     'Agendar reunión': 'Agendar reunião',
 
     // Servicios
@@ -227,8 +227,8 @@ window.I18N = {
       'Empresas que tomam decisões importantes mas não têm informação financeira real para sustentá-las — e não querem o custo de um CFO interno em tempo integral.',
     'Expansión & Market Entry LATAM': 'Expansão & Market Entry LATAM',
     'Regional Expansion & Market Entry': 'Regional Expansion & Market Entry',
-    'Acompañamos a empresas extranjeras que quieren instalarse en Argentina y a empresas argentinas que quieren expandirse a Paraguay o Brasil — con estructura legal, fiscal y operativa real desde el primer día.':
-      'Acompanhamos empresas estrangeiras que querem se instalar na Argentina e empresas argentinas que querem se expandir para o Paraguai ou Brasil — com estrutura legal, fiscal e operacional real desde o primeiro dia.',
+    'Acompañamos a empresas extranjeras que quieren instalarse en Argentina y a empresas locales o internacionales que quieren expandirse a Paraguay o Brasil — con estructura legal, fiscal y operativa real desde el primer día.':
+      'Acompanhamos empresas estrangeiras que querem se instalar na Argentina e empresas locais ou internacionais que querem se expandir para o Paraguai ou Brasil — com estrutura legal, fiscal e operacional real desde o primeiro dia.',
     'Entrada a Argentina': 'Entrada na Argentina',
     'Constitución de sociedad (SAS / SA / SRL)': 'Constituição de empresa (SAS / SA / SRL)',
     'Domicilio legal y fiscal para empresas extranjeras': 'Domicílio legal e fiscal para empresas estrangeiras',
